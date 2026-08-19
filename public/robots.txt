@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+sitemap: https://renfraenergy.com/sitemap.xml

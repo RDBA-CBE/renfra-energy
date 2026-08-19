@@ -1,0 +1,1856 @@
+"use client";
+
+import { Suspense } from "react";
+import Image from "next/image";
+import { ExternalLink, ArrowLeft, CheckCircle2 } from "lucide-react";
+import InnerBannersol from "@/components/Inner-bannersol";
+import Link from "next/link";
+import ProjectsSlider from "@/components/ProjectsSlider";
+import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { axiosGet, BASE_URL } from "@/lib/api";
+
+// ─── Static content per solution ─────────────────────────────────────────────
+const staticSolutionContent = {
+  solar: {
+    mainTitle: "Solar PV Solutions",
+    subtitle: "Solution Subtitle",
+    introParagraph:
+      "100MW Solar PV project construction and connected to grid in record breaking 90 days. Our solar photovoltaic solutions leverage cutting-edge technology to deliver maximum energy yield, with proven track records across utility-scale, commercial, and industrial installations throughout India.",
+
+    topCards: [
+      {
+        title: "Innovative Design",
+        bullets: [
+          "Advanced technology integration",
+          "Sustainable manufacturing process",
+          "Optimized performance metrics",
+        ],
+      },
+      {
+        title: "Quality Assurance",
+        bullets: [
+          "Global quality standards",
+          "Rigorous testing procedures",
+          "Certified excellence",
+        ],
+      },
+    ],
+
+    featureCard: {
+      title: "Key Features",
+      bullets: [
+        "Advanced technology solutions",
+        "End-to-end support",
+        "Quality assurance",
+        "Expert team",
+      ],
+      commitmentSubtitle: "Our Commitment",
+      commitmentText:
+        "We are committed to delivering high-efficiency, durable solutions that meet global quality standards while contributing to a sustainable future.",
+    },
+
+    infographics: [
+      { icon: "🕐", label: "Ongoing Projects" },
+      { icon: "⚡", label: "Installed Capacity" },
+      { icon: "✅", label: "Quality Assured" },
+      { icon: "🛠️", label: "24/7 Support" },
+    ],
+
+    overviewCard: {
+      title: "Solutions Overview",
+      bullets: [
+        "Comprehensive solution design",
+        "Professional implementation",
+        "Long-term support and maintenance",
+      ],
+    },
+
+    mediaType: "image", // "image" or "video"
+    mediaSrc: "/images/about.png",
+
+    manufacturingTitle: "Solar PV Manufacturing",
+    manufacturingParagraph:
+      "Our state-of-the-art manufacturing unit is poised to support the ever-increasing demand with cutting-edge technology and sustainable production processes. We deliver high-efficiency, durable products that meet global quality standards while contributing to a greener future. Our facilities are equipped with the latest automation and quality control systems to ensure every panel meets the highest performance benchmarks.",
+  },
+
+  wind: {
+    mainTitle: "Wind Energy Solutions",
+    subtitle: "Harnessing the Power of Wind",
+    introParagraph:
+      "99MW Wind Farm commissioned in Tamil Nadu, delivering clean energy to thousands of homes. Our wind energy solutions encompass the full project lifecycle — from site assessment and turbine selection to installation, commissioning, and long-term operations across onshore and offshore environments.",
+
+    topCards: [
+      {
+        title: "Advanced Engineering",
+        bullets: [
+          "Precision wind resource assessment",
+          "Optimised turbine placement",
+          "Robust structural design",
+        ],
+      },
+      {
+        title: "Performance Standards",
+        bullets: [
+          "IEC-certified turbines",
+          "Real-time SCADA monitoring",
+          "Internationally benchmarked output",
+        ],
+      },
+    ],
+
+    featureCard: {
+      title: "Key Features",
+      bullets: [
+        "Full EPC capabilities",
+        "Grid integration expertise",
+        "Lifecycle asset management",
+        "Dedicated technical support",
+      ],
+      commitmentSubtitle: "Our Commitment",
+      commitmentText:
+        "We are committed to maximising energy generation from wind resources while minimising environmental impact and ensuring reliable grid-connected performance.",
+    },
+
+    infographics: [
+      { icon: "💨", label: "Wind Projects" },
+      { icon: "⚡", label: "MW Installed" },
+      { icon: "🌍", label: "Eco Certified" },
+      { icon: "🔧", label: "24/7 Support" },
+    ],
+
+    overviewCard: {
+      title: "Solutions Overview",
+      bullets: [
+        "Site feasibility & wind studies",
+        "Turnkey EPC delivery",
+        "Post-commissioning O&M",
+      ],
+    },
+
+    mediaType: "image",
+    mediaSrc: "/images/about.png",
+
+    manufacturingTitle: "Wind Technology",
+    manufacturingParagraph:
+      "Our wind technology partnerships bring globally proven turbine platforms to Indian conditions. From low-wind-speed sites to high-altitude installations, we tailor rotor diameter, hub height, and control algorithms to extract maximum annual energy production. Each project is backed by bankable energy yield assessments and independent engineering reviews to secure financing and long-term revenue certainty.",
+  },
+
+  commercial: {
+    mainTitle: "Commercial & Industrial (C&I)",
+    subtitle: "Powering Industry with Renewable Energy",
+    introParagraph:
+      "Delivering 75MW+ of rooftop and ground-mounted solar installations for leading industrial and commercial enterprises across India. Our C&I solutions are designed to reduce energy costs, improve sustainability ratings, and provide energy security for high-demand facilities.",
+
+    topCards: [
+      {
+        title: "Tailored Design",
+        bullets: [
+          "Custom load analysis & sizing",
+          "Rooftop and ground-mount options",
+          "Seamless grid and DG integration",
+        ],
+      },
+      {
+        title: "Financial Benefits",
+        bullets: [
+          "Up to 30% reduction in electricity bills",
+          "Accelerated depreciation benefits",
+          "Transparent ROI modelling",
+        ],
+      },
+    ],
+
+    featureCard: {
+      title: "Key Features",
+      bullets: [
+        "Fast-track project execution",
+        "Net metering & open access",
+        "OPEX and CAPEX models",
+        "Dedicated account management",
+      ],
+      commitmentSubtitle: "Our Commitment",
+      commitmentText:
+        "We deliver bankable C&I renewable solutions that align with corporate sustainability goals while generating measurable financial returns from day one.",
+    },
+
+    infographics: [
+      { icon: "🏭", label: "C&I Projects" },
+      { icon: "💰", label: "Cost Savings" },
+      { icon: "🌱", label: "Carbon Avoided" },
+      { icon: "📊", label: "Live Monitoring" },
+    ],
+
+    overviewCard: {
+      title: "Solutions Overview",
+      bullets: [
+        "Energy audit & feasibility",
+        "Engineering, procurement & construction",
+        "Ongoing performance monitoring",
+      ],
+    },
+
+    mediaType: "image",
+    mediaSrc: "/images/about.png",
+
+    manufacturingTitle: "C&I Solar Technology",
+    manufacturingParagraph:
+      "Our commercial and industrial installations employ premium bifacial modules, string inverters, and intelligent monitoring platforms to ensure peak performance across diverse industrial environments. We handle all statutory approvals, net metering applications, and grid connectivity requirements, providing a truly turnkey experience. Our portfolio includes manufacturing plants, warehouses, IT parks, hospitals, and educational institutions across India.",
+  },
+
+  storage: {
+    mainTitle: "Energy Storage Systems",
+    subtitle: "Reliable Power, Round the Clock",
+    introParagraph:
+      "Deploying utility-scale and behind-the-meter battery energy storage systems that enhance grid stability, enable renewable integration, and ensure uninterrupted power for critical loads. Our BESS solutions are engineered to deliver precise power and energy management across diverse applications.",
+
+    topCards: [
+      {
+        title: "System Design",
+        bullets: [
+          "Application-specific cell chemistry",
+          "Scalable modular architecture",
+          "Advanced BMS & EMS integration",
+        ],
+      },
+      {
+        title: "Safety & Compliance",
+        bullets: [
+          "IEC 62619 & UL 9540 certified",
+          "Fire suppression systems",
+          "Continuous thermal monitoring",
+        ],
+      },
+    ],
+
+    featureCard: {
+      title: "Key Features",
+      bullets: [
+        "Peak shaving & load shifting",
+        "Frequency regulation support",
+        "Seamless solar + BESS coupling",
+        "Remote diagnostics & control",
+      ],
+      commitmentSubtitle: "Our Commitment",
+      commitmentText:
+        "We are committed to delivering storage solutions that maximise renewable utilisation, reduce grid dependency, and provide long-term asset reliability with transparent performance guarantees.",
+    },
+
+    infographics: [
+      { icon: "🔋", label: "MWh Deployed" },
+      { icon: "⚡", label: "Peak Shaved" },
+      { icon: "✅", label: "Safety Certified" },
+      { icon: "📡", label: "Remote Monitoring" },
+    ],
+
+    overviewCard: {
+      title: "Solutions Overview",
+      bullets: [
+        "System sizing & bankability studies",
+        "Turnkey BESS installation",
+        "Performance-based O&M contracts",
+      ],
+    },
+
+    mediaType: "image",
+    mediaSrc: "/images/about.png",
+
+    manufacturingTitle: "Battery Technology",
+    manufacturingParagraph:
+      "We partner with globally certified battery manufacturers to source lithium iron phosphate (LFP) and NMC cells that balance energy density, cycle life, and safety. Our in-house engineering team integrates power conversion systems, transformer skids, and SCADA platforms into complete turnkey BESS packages. Every installation undergoes rigorous factory acceptance testing and on-site commissioning verification before handover, ensuring performance guarantees are met from the first cycle.",
+  },
+
+  maintenance: {
+    mainTitle: "Operations & Maintenance",
+    subtitle: "Maximising Asset Performance Across the Lifecycle",
+    introParagraph:
+      "Managing 1,000+ renewable energy assets across India with data-driven O&M services that consistently exceed contractual performance ratios. Our integrated operations model combines preventive maintenance schedules, predictive analytics, and rapid response teams to protect asset value throughout the project lifetime.",
+
+    topCards: [
+      {
+        title: "Preventive Maintenance",
+        bullets: [
+          "Scheduled inspection protocols",
+          "Thermal imaging & drone surveys",
+          "Cleaning and vegetation management",
+        ],
+      },
+      {
+        title: "Performance Monitoring",
+        bullets: [
+          "Real-time SCADA dashboards",
+          "AI-driven fault detection",
+          "Monthly generation reports",
+        ],
+      },
+    ],
+
+    featureCard: {
+      title: "Key Features",
+      bullets: [
+        "24/7 remote monitoring centre",
+        "Rapid field response teams",
+        "Spare parts inventory management",
+        "Contractual PR guarantees",
+      ],
+      commitmentSubtitle: "Our Commitment",
+      commitmentText:
+        "We are committed to delivering O&M excellence that protects investor returns, extends equipment life, and maintains safe, reliable renewable energy generation year after year.",
+    },
+
+    infographics: [
+      { icon: "🏗️", label: "Assets Managed" },
+      { icon: "📈", label: "Avg. Uptime" },
+      { icon: "🔍", label: "Fault Detection" },
+      { icon: "🛡️", label: "PR Guaranteed" },
+    ],
+
+    overviewCard: {
+      title: "Solutions Overview",
+      bullets: [
+        "Comprehensive O&M contracts",
+        "Performance ratio optimisation",
+        "End-of-life asset management",
+      ],
+    },
+
+    mediaType: "image",
+    mediaSrc: "/images/about.png",
+
+    manufacturingTitle: "O&M Technology",
+    manufacturingParagraph:
+      "Our proprietary Asset Performance Management (APM) platform aggregates data from inverters, weather stations, and energy meters to provide a single-pane-of-glass view across an entire portfolio. Machine learning algorithms analyse historical generation patterns to predict failures before they occur, reducing unplanned downtime by up to 40%. Our field technicians are certified by leading OEMs and supported by a centralised spare-parts logistics network to ensure the fastest possible mean-time-to-repair across all sites.",
+  },
+};
+
+// ─── Static Content Sections Component ───────────────────────────────────────
+function StaticSolutionSections({ solutionKey }) {
+  const content = staticSolutionContent[solutionKey];
+  if (!content) return null;
+
+  return (
+    <div className="w-full">
+      {/* 1. Main Title (center) + Subtitle (left) + Intro Paragraph */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 text-[#293E52]">
+          {content.mainTitle}
+        </h1>
+        <h3 className="text-lg sm:text-xl font-semibold text-left text-[#293E52] mb-2">
+          {content.subtitle}
+        </h3>
+        <p className="text-sm sm:text-base text-gray-600 leading-relaxed w-full">
+          {content.introParagraph}
+        </p>
+      </section>
+
+      {/* 2. Two Grid Cards – title + bullets, outlined */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {content.topCards.map((card, i) => (
+            <div
+              key={i}
+              className="border border-gray-200 rounded-lg p-5 sm:p-6 bg-white"
+            >
+              <h4 className="text-base sm:text-lg font-bold text-[#293E52] mb-3 text-left">
+                {card.title}
+              </h4>
+              <ul className="space-y-2">
+                {card.bullets.map((b, j) => (
+                  <li key={j} className="flex items-start gap-2 text-sm text-gray-700">
+                    <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#3CA948] flex-shrink-0" />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. Left: Feature Card | Right: Infographics 2x2 grid */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left feature card */}
+          <div className="border border-gray-200 rounded-lg p-5 sm:p-6 bg-white">
+            <h4 className="text-base sm:text-lg font-bold text-[#293E52] mb-3 text-left">
+              {content.featureCard.title}
+            </h4>
+            <ul className="space-y-2 mb-5">
+              {content.featureCard.bullets.map((b, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                  <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#3CA948] flex-shrink-0" />
+                  {b}
+                </li>
+              ))}
+            </ul>
+            <h5 className="text-sm font-bold text-[#293E52] mb-2 text-left">
+              {content.featureCard.commitmentSubtitle}
+            </h5>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {content.featureCard.commitmentText}
+            </p>
+          </div>
+
+          {/* Right infographics – 2×2 grid */}
+          <div className="grid grid-cols-3 gap-4">
+            {content.infographics.map((item, i) => (
+              <div
+                key={i}
+                className="flex flex-col items-center justify-center border border-gray-200 rounded-lg p-4 bg-white gap-2"
+              >
+                <span className="text-4xl">{item.icon}</span>
+                <p className="text-sm font-semibold text-[#293E52] text-center">
+                  {item.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Left: Overview Card | Right: Image or Video */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+          {/* Left overview card */}
+          <div className="border border-gray-200 rounded-lg p-5 sm:p-6 bg-white">
+            <h4 className="text-base sm:text-lg font-bold text-[#293E52] mb-3 text-left">
+              {content.overviewCard.title}
+            </h4>
+            <ul className="space-y-2">
+              {content.overviewCard.bullets.map((b, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                  <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#3CA948] flex-shrink-0" />
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Right media */}
+          <div className="rounded-lg overflow-hidden border border-gray-200 bg-black">
+            {content.mediaType === "video" ? (
+              <video
+                src={content.mediaSrc}
+                controls
+                className="w-full h-56 sm:h-64 object-cover"
+              />
+            ) : (
+              <div className="relative w-full h-56 sm:h-64">
+                <Image
+                  src={content.mediaSrc}
+                  alt="Solution media"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Manufacturing / Technology Title (left) + Full-width paragraph */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <h2 className="text-xl sm:text-2xl font-bold text-left text-[#293E52] mb-3">
+          {content.manufacturingTitle}
+        </h2>
+        <p className="text-sm sm:text-base text-gray-600 leading-relaxed w-full">
+          {content.manufacturingParagraph}
+        </p>
+      </section>
+    </div>
+  );
+}
+
+// ─── Key map: API solution ID → static content key ───────────────────────────
+// Update these mappings to match your actual API data_uniq_id values.
+const SOLUTION_KEY_MAP = {
+  solar: "solar",
+  wind: "wind",
+  commercial: "commercial",
+  storage: "storage",
+  maintenance: "maintenance",
+  // Add more mappings as needed, e.g. "uuid-abc-123": "solar"
+};
+
+function getStaticKey(solutionId, solutionName) {
+  if (SOLUTION_KEY_MAP[solutionId]) return SOLUTION_KEY_MAP[solutionId];
+  // fallback: match by name
+  const name = (solutionName || "").toLowerCase();
+  if (name.includes("solar")) return "solar";
+  if (name.includes("wind")) return "wind";
+  if (name.includes("commercial") || name.includes("industrial")) return "commercial";
+  if (name.includes("storage")) return "storage";
+  if (name.includes("maintenance") || name.includes("operation")) return "maintenance";
+  return null;
+}
+
+// ─── Main Page Content ────────────────────────────────────────────────────────
+function SolutionInnerContent() {
+  const searchParams = useSearchParams();
+  const solutionId = searchParams.get("id");
+
+  const [solution, setSolution] = useState(null);
+  const [projects, setProjects] = useState([]);
+  const [allSolutions, setAllSolutions] = useState([]);
+  const [relatedSolutions, setRelatedSolutions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [noData, setNoData] = useState(false);
+
+  const fetchSolutionsList = async () => {
+    try {
+      const res = await axiosGet.get("masters/solutions/get/?web_sts=1");
+      setAllSolutions(res.data.data);
+    } catch (err) {
+      console.error("Solutions List Error:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSolutionsList();
+  }, []);
+
+  const loadSolution = async (id) => {
+    setLoading(true);
+    setNoData(false);
+    try {
+      const res = await axiosGet.get(
+        `/masters/solutions/content/get/?solution_id=${id}&web_sts=1`
+      );
+      const root = res.data.data?.[0];
+      if (!root || !root.data) {
+        setNoData(true);
+        setSolution(null);
+        return;
+      }
+      setSolution({
+        title: root.solution_name,
+        sub_title: root.sub_title || "",
+      });
+    } catch (err) {
+      console.error("Solution Load Error:", err);
+      setNoData(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (solutionId) loadSolution(solutionId);
+  }, [solutionId]);
+
+  const fetchProjects = async () => {
+    try {
+      const res = await axiosGet.get(`masters/projects/get/?web_sts=1`);
+      const formatted = res.data.data.map((p) => ({
+        image: p.image_path ? BASE_URL + p.image_path : "/images/about.png",
+        title: p.project_title || p.title || "Project",
+        location: p.location || "",
+        capacity: p.capacity || "",
+      }));
+      setProjects(formatted);
+    } catch (err) {
+      console.error("Projects Error:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  useEffect(() => {
+    if (!solution || allSolutions.length === 0) return;
+    const filtered = allSolutions.filter((s) => s.data_uniq_id !== solutionId);
+    const formatted = filtered.slice(0, 3).map((s) => ({
+      imgSrc: s.image_path ? BASE_URL + s.image_path : "/images/default.png",
+      subtitle: s.title,
+      description: s.description || "Explore this solution",
+      link: `/solutions-details?id=${s.data_uniq_id}`,
+    }));
+    setRelatedSolutions(formatted);
+  }, [allSolutions, solution]);
+
+  if (loading) {
+    return (
+      <div className="w-full py-20 text-center text-[#293E52] text-lg font-semibold">
+        Loading...
+      </div>
+    );
+  }
+
+  if (noData) {
+    return (
+      <div className="w-full py-20 text-center text-red-600 text-lg font-semibold">
+        No Data Found
+      </div>
+    );
+  }
+
+  if (!solution) return null;
+
+  const staticKey = getStaticKey(solutionId, solution.title);
+
+  return (
+    <>
+      <InnerBannersol title={solution.title} bgImage="/images/sol-inner.png" />
+
+      <main className="w-full">
+        {/* ── STATIC SECTIONS (per solution) ── */}
+        {staticKey && <StaticSolutionSections solutionKey={staticKey} />}
+
+        {/* ── PROJECTS (API) ── */}
+        {projects.length > 0 && (
+          <div className="bg-[#F6F6F6]">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+              <h2 className="text-2xl sm:text-3xl font-bold text-left mb-8 text-[#1A202C]">
+                Our Projects
+              </h2>
+              <ProjectsSlider projects={projects} />
+            </div>
+          </div>
+        )}
+
+        {/* ── GO BACK ── */}
+        <div className="bg-[#F6F6F6]">
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <Link
+              href="/solutions"
+              className="inline-flex items-center gap-2 text-[#293E52] hover:text-[#3CA948] font-semibold transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              Go back to Solutions
+            </Link>
+          </div>
+        </div>
+
+        {/* ── RELATED SOLUTIONS (API) ── */}
+        {relatedSolutions.length > 0 && (
+          <div className="bg-[#F6F6F6]">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+              <h2 className="text-2xl sm:text-3xl font-bold text-left mb-8 text-[#1A202C]">
+                Related Solutions
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedSolutions.map((card, i) => (
+                  <div
+                    key={i}
+                    className="bg-white border border-gray-200 rounded-lg p-5 sm:p-6 transform transition-all duration-300 ease-in-out hover:scale-[1.03] hover:shadow-lg"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <Image
+                        src={card.imgSrc}
+                        alt={card.subtitle}
+                        width={48}
+                        height={48}
+                        className="w-10 sm:w-12 h-10 sm:h-12 object-contain"
+                      />
+                      <Link
+                        href={card.link}
+                        className="text-blue-600 hover:text-[#3CA948] transition-colors"
+                      >
+                        <ExternalLink className="w-6 sm:w-7 h-6 sm:h-7 flex-shrink-0" />
+                      </Link>
+                    </div>
+                    <p className="text-base sm:text-lg font-semibold text-[#293E52] mb-3">
+                      {card.subtitle}
+                    </p>
+                    <p
+                      className="text-sm sm:text-base text-gray-600 leading-relaxed line-clamp-4"
+                      dangerouslySetInnerHTML={{ __html: card.description }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+    </>
+  );
+}
+
+export default function SolutionInnerPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          Loading...
+        </div>
+      }
+    >
+      <SolutionInnerContent />
+    </Suspense>
+  );
+}
+
+
+
+
+Before the new static added in the solutions inner page code
+
+"use client";
+
+import { Suspense } from "react";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import { ExternalLink, ArrowLeft } from "lucide-react";
+import InnerBanner from "@/components/Inner-banner";
+import Link from "next/link";
+import ProjectsSlider from "@/components/ProjectsSlider";
+import ExpandableText from "@/components/ExpandableText";
+import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { axiosGet, BASE_URL } from "@/lib/api";
+import parse from "html-react-parser";
+import InnerBannersol from "@/components/Inner-bannersol";
+
+const solutionsData = {
+  solar: {
+    title: "Solar PV",
+    projects: [
+      {
+        image: "/images/about.png",
+        title: "500MW Solar Farm",
+        location: "Rajasthan, India",
+        capacity: "500 MW",
+      },
+      {
+        image: "/images/about.png",
+        title: "Commercial Rooftop Installation",
+        location: "Mumbai, India",
+        capacity: "50 MW",
+      },
+      {
+        image: "/images/about.png",
+        title: "Industrial Solar Plant",
+        location: "Gujarat, India",
+        capacity: "200 MW",
+      },
+    ],
+    relatedSolutions: [
+      {
+        imgSrc: "/images/sol2.png",
+        subtitle: "Commercial & Industrial",
+        description:
+          "Maximize yield with optimal orientation and accessibility for industries and commercial establishments with high energy demand",
+      },
+      {
+        imgSrc: "/images/sol3.png",
+        subtitle: "Operation & Maintenance ",
+        description:
+          "Our bespoken O&M solutions ensures long term efficiency, reliability and profitability of the renewable installations",
+      },
+      {
+        imgSrc: "/images/sol4.png",
+        subtitle: "Energy Storage System ",
+        description:
+          "To further provide optimal utilisation and enhanced power reliability, we integrate battery energy storage systems with renewable energy sources.",
+      },
+    ],
+  },
+
+  wind: {
+    title: "Wind",
+    projects: [
+      {
+        image: "/images/about.png",
+        title: "99MW Wind Farm",
+        location: "Tamil Nadu, India",
+        capacity: "99 MW",
+      },
+      {
+        image: "/images/about.png",
+        title: "Offshore Wind Development",
+        location: "Gujarat Coast, India",
+        capacity: "150 MW",
+      },
+      {
+        image: "/images/about.png",
+        title: "Hybrid Wind-Solar Plant",
+        location: "Rajasthan, India",
+        capacity: "250 MW",
+      },
+    ],
+    relatedSolutions: [
+      {
+        imgSrc: "/images/sol2.png",
+        subtitle: "Commercial & Industrial",
+        description:
+          "Maximize yield with optimal orientation and accessibility for industries and commercial establishments with high energy demand",
+      },
+      {
+        imgSrc: "/images/sol4.png",
+        subtitle: "Energy Storage System ",
+        description:
+          "To further provide optimal utilisation and enhanced power reliability, we integrate battery energy storage systems with renewable energy sources.",
+      },
+      {
+        imgSrc: "/images/sol3.png",
+        subtitle: "Operation & Maintenance ",
+        description:
+          "Our bespoken O&M solutions ensures long term efficiency, reliability and profitability of the renewable installations",
+      },
+    ],
+  },
+
+  commercial: {
+    title: "Commercial and Industrial (C&I)",
+    projects: [
+      {
+        image: "/images/about.png",
+        title: "500MW Wind Farm",
+        location: "Pune, India",
+        capacity: "75 MW",
+      },
+      {
+        image: "/images/about.png",
+        title: "450MW Solar EPC",
+        location: "Bangalore, India",
+        capacity: "40 MW",
+      },
+      {
+        image: "/images/about.png",
+        title: "Warehouse Solar Rooftop",
+        location: "Delhi NCR, India",
+        capacity: "25 MW",
+      },
+    ],
+    relatedSolutions: [
+      {
+        imgSrc: "/images/sol2.png",
+        subtitle: "Wind",
+        description:
+          "Delivering 100MW+ of wind projects and expanding capacity across India.",
+      },
+      {
+        imgSrc: "/images/sol4.png",
+        subtitle: "Energy Storage System ",
+        description:
+          "To further provide optimal utilisation and enhanced power reliability, we integrate battery energy storage systems with renewable energy sources",
+      },
+      {
+        imgSrc: "/images/sol3.png",
+        subtitle: "Operation & Maintenance ",
+        description:
+          "Our bespoken O&M solutions ensures long term efficiency, reliability and profitability of the renewable installations",
+      },
+    ],
+  },
+
+  storage: {
+    title: "Energy Storage System",
+    projects: [
+      {
+        image: "/images/about.png",
+        title: "Industrial BESS Installation",
+        location: "Chennai, India",
+        capacity: "100 MWh",
+      },
+      {
+        image: "/images/about.png",
+        title: "Grid-Scale Storage",
+        location: "Hyderabad, India",
+        capacity: "250 MWh",
+      },
+      {
+        image: "/images/about.png",
+        title: "Hybrid Solar+BESS",
+        location: "Ahmedabad, India",
+        capacity: "150 MWh",
+      },
+    ],
+    relatedSolutions: [
+      {
+        imgSrc: "/images/sol2.png",
+        subtitle: "Commercial & Industrial",
+        description:
+          "Maximize yield with optimal orientation and accessibility for industries and commercial establishments with high energy demand",
+      },
+      {
+        imgSrc: "/images/sol2.png",
+        subtitle: "Wind",
+        description:
+          "Delivering 100MW+ of wind projects and expanding capacity across India.",
+      },
+      {
+        imgSrc: "/images/sol3.png",
+        subtitle: "Operation & Maintenance ",
+        description:
+          "Our bespoken O&M solutions ensures long term efficiency, reliability and profitability of the renewable installations",
+      },
+    ],
+  },
+
+  maintenance: {
+    title: "Operations & Maintenance",
+    projects: [
+      {
+        image: "/images/about.png",
+        title: "Multi-Site O&M Services",
+        location: "Pan-India",
+        capacity: "1000+ Assets",
+      },
+      {
+        image: "/images/about.png",
+        title: "Solar Farm Maintenance",
+        location: "Rajasthan, India",
+        capacity: "500 MW",
+      },
+      {
+        image: "/images/about.png",
+        title: "Wind Turbine Services",
+        location: "Tamil Nadu, India",
+        capacity: "250 MW",
+      },
+    ],
+    relatedSolutions: [
+      {
+        imgSrc: "/images/sol2.png",
+        subtitle: "Commercial & Industrial",
+        description:
+          "Maximize yield with optimal orientation and accessibility for industries and commercial establishments with high energy demand",
+      },
+      {
+        imgSrc: "/images/sol2.png",
+        subtitle: "Wind",
+        description:
+          "Delivering 100MW+ of wind projects and expanding capacity across India.",
+      },
+      {
+        imgSrc: "/images/sol4.png",
+        subtitle: "Energy Storage System ",
+        description:
+          "To further provide optimal utilisation and enhanced power reliability, we integrate battery energy storage systems with renewable energy sources",
+      },
+    ],
+  },
+};
+
+function SolutionInnerContent() {
+  const searchParams = useSearchParams();
+  const solutionId = searchParams.get("id");
+
+  const [solution, setSolution] = useState(null);
+  const [projects, setProjects] = useState([]);
+  const [allSolutions, setAllSolutions] = useState([]);
+  const [relatedSolutions, setRelatedSolutions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [noData, setNoData] = useState(false);
+
+
+  const fetchSolutionsList = async () => {
+    try {
+      const res = await axiosGet.get("masters/solutions/get/?web_sts=1");
+      const data = res.data.data;
+      setAllSolutions(data);
+    } catch (err) {
+      console.error("Solutions List Error:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSolutionsList();
+  }, []);
+
+  const loadSolution = async (id) => {
+  setLoading(true);
+  setNoData(false);
+
+  try {
+    const res = await axiosGet.get(
+      `/masters/solutions/content/get/?solution_id=${id}&web_sts=1`
+    );
+
+    const root = res.data.data?.[0];
+    if (!root) {
+      setNoData(true);
+      setSolution(null);
+      return;
+    }
+
+    const content = root.data;
+    if (!content) {
+      setNoData(true);
+      setSolution(null);
+      return;
+    }
+
+    setSolution({
+      title: root.solution_name,
+      sub_title: root.sub_title || "",
+    });
+  } catch (err) {
+    console.error("Solution Load Error:", err);
+    setNoData(true);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  useEffect(() => {
+    if (solutionId) {
+      loadSolution(solutionId);
+    }
+  }, [solutionId]);
+
+  
+  const fetchMaster = async () => {
+    axiosGet
+      .get(`masters/projects/get/?web_sts=1`)
+      .then((response) => {
+        const formatted = response.data.data.map((p) => ({
+          image: p.image_path ? BASE_URL + p.image_path : "/images/about.png",
+          title: p.project_title || p.title || "Project",
+          location: p.location || "",
+          capacity: p.capacity || "",
+        }));
+
+        setProjects(formatted);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  useEffect(() => {
+    fetchMaster();
+  }, []);
+
+  useEffect(() => {
+    if (!solution || allSolutions.length === 0) return;
+
+    const filtered = allSolutions.filter(
+      (item) => item.data_uniq_id !== solutionId
+    );
+
+    const selected = filtered.slice(0, 3);
+
+    const formatted = selected.map((s) => ({
+      imgSrc: s.image_path ? BASE_URL + s.image_path : "/images/default.png",
+      subtitle: s.title,
+      description: s.description || "Explore this solution",
+      link: `/solutions-details?id=${s.data_uniq_id}`,
+    }));
+
+    setRelatedSolutions(formatted);
+  }, [allSolutions, solution]);
+
+
+  if (loading) {
+  return (
+    <div className="w-full py-20 text-center text-[#293E52] text-lg font-semibold">
+      Loading...
+    </div>
+  );
+}
+
+if (noData) {
+  return (
+    <div className="w-full py-20 text-center text-red-600 text-lg font-semibold">
+      No Data Found
+    </div>
+  );
+}
+
+
+  if (!solution) return <div className="p-10 text-center">Loading...</div>;
+
+  return (
+    <>
+      <InnerBannersol
+        title={solution.title}
+        bgImage="/images/sol-inner.png"
+      />
+
+      <main className="w-full">
+        {/* Title */}
+        <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-0 text-[#293E52]">
+            {solution.title}
+          </h1>
+          {solution.sub_title && (
+  <p className="mt-2 text-center text-gray-600 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed">
+  {solution.sub_title}
+</p>
+
+)}
+        </section>
+
+        {/* Our Projects Section */}
+        {projects.length > 0 && (
+          <div className="bg-[#F6F6F6]">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+              <h2 className="text-2xl sm:text-3xl font-bold text-left mb-8 text-[#1A202C]">
+                Our Projects
+              </h2>
+              <ProjectsSlider projects={projects} />
+            </div>
+          </div>
+        )}
+
+        {/* Go Back to Solutions Page */}
+        <div className="bg-[#F6F6F6]">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <Link
+            href="/solutions"
+            className="inline-flex items-center gap-2 text-[#293E52] hover:text-[#3CA948] font-semibold transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Go back to Solutions
+          </Link>
+        </div>
+        </div>
+
+        {/* Related Solutions */}
+        {relatedSolutions.length > 0 && (
+          <div className="bg-[#F6F6F6]">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+              <h2 className="text-2xl sm:text-3xl font-bold text-left mb-8 text-[#1A202C]">
+                Related Solutions
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedSolutions.map((card, i) => (
+                  <div
+                    key={i}
+                    className="bg-white border border-gray-200 rounded-lg p-5 sm:p-6 transform transition-all duration-300 ease-in-out
+            hover:scale-[1.03] hover:shadow-lg"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <Image
+                        src={card.imgSrc}
+                        alt={card.subtitle}
+                        width={48}
+                        height={48}
+                        className="w-10 sm:w-12 h-10 sm:h-12 object-contain"
+                      />
+                      <Link
+                        href={card.link}
+                        className="text-blue-600 hover:text-[#3CA948] transition-colors"
+                      >
+                        <ExternalLink className="w-6 sm:w-7 h-6 sm:h-7 flex-shrink-0" />
+                      </Link>
+                    </div>
+                    <p className="text-base sm:text-lg font-semibold text-[#293E52] mb-3">
+                      {card.subtitle}
+                    </p>
+                    <p
+                      className="text-sm sm:text-base text-gray-600 leading-relaxed line-clamp-4"
+                      dangerouslySetInnerHTML={{ __html: card.description }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+    </>
+  );
+}
+
+export default function SolutionInnerPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          Loading...
+        </div>
+      }
+    >
+      <SolutionInnerContent />
+    </Suspense>
+  );
+}
+
+
+The code with infographics section as the image set
+
+"use client";
+
+import { Suspense } from "react";
+import Image from "next/image";
+import { ExternalLink, ArrowLeft, CheckCircle2 } from "lucide-react";
+import InnerBannersol from "@/components/Inner-bannersol";
+import Link from "next/link";
+import ProjectsSlider from "@/components/ProjectsSlider";
+import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { axiosGet, BASE_URL } from "@/lib/api";
+
+// ─── Static content per solution ─────────────────────────────────────────────
+const staticSolutionContent = {
+  solar: {
+    mainTitle: "Solar PV Solutions",
+    subtitle: "Solution Subtitle",
+    introParagraph:
+      "100MW Solar PV project construction and connected to grid in record breaking 90 days. Our solar photovoltaic solutions leverage cutting-edge technology to deliver maximum energy yield, with proven track records across utility-scale, commercial, and industrial installations throughout India.",
+
+    topCards: [
+      {
+        title: "Innovative Design",
+        bullets: [
+          "Advanced technology integration",
+          "Sustainable manufacturing process",
+          "Optimized performance metrics",
+        ],
+      },
+      {
+        title: "Quality Assurance",
+        bullets: [
+          "Global quality standards",
+          "Rigorous testing procedures",
+          "Certified excellence",
+        ],
+      },
+    ],
+
+    featureCard: {
+      title: "Key Features",
+      bullets: [
+        "Advanced technology solutions",
+        "End-to-end support",
+        "Quality assurance",
+        "Expert team",
+      ],
+      commitmentSubtitle: "Our Commitment",
+      commitmentText:
+        "We are committed to delivering high-efficiency, durable solutions that meet global quality standards while contributing to a sustainable future.",
+    },
+
+    // infographics: [
+    //   { icon: "🕐", label: "Ongoing Projects" },
+    //   { icon: "⚡", label: "Installed Capacity" },
+    //   { icon: "✅", label: "Quality Assured" },
+    //   { icon: "🛠️", label: "24/7 Support" },
+    // ],
+    infographicsImage: "/images/your-infographic.jpg",
+
+
+    overviewCard: {
+      title: "Solutions Overview",
+      bullets: [
+        "Comprehensive solution design",
+        "Professional implementation",
+        "Long-term support and maintenance",
+      ],
+    },
+
+    mediaType: "image", // "image" or "video"
+    mediaSrc: "/images/about.png",
+
+    manufacturingTitle: "Solar PV Manufacturing",
+    manufacturingParagraph:
+      "Our state-of-the-art manufacturing unit is poised to support the ever-increasing demand with cutting-edge technology and sustainable production processes. We deliver high-efficiency, durable products that meet global quality standards while contributing to a greener future. Our facilities are equipped with the latest automation and quality control systems to ensure every panel meets the highest performance benchmarks.",
+  },
+
+  wind: {
+    mainTitle: "Wind Energy Solutions",
+    subtitle: "Harnessing the Power of Wind",
+    introParagraph:
+      "99MW Wind Farm commissioned in Tamil Nadu, delivering clean energy to thousands of homes. Our wind energy solutions encompass the full project lifecycle — from site assessment and turbine selection to installation, commissioning, and long-term operations across onshore and offshore environments.",
+
+    topCards: [
+      {
+        title: "Advanced Engineering",
+        bullets: [
+          "Precision wind resource assessment",
+          "Optimised turbine placement",
+          "Robust structural design",
+        ],
+      },
+      {
+        title: "Performance Standards",
+        bullets: [
+          "IEC-certified turbines",
+          "Real-time SCADA monitoring",
+          "Internationally benchmarked output",
+        ],
+      },
+    ],
+
+    featureCard: {
+      title: "Key Features",
+      bullets: [
+        "Full EPC capabilities",
+        "Grid integration expertise",
+        "Lifecycle asset management",
+        "Dedicated technical support",
+      ],
+      commitmentSubtitle: "Our Commitment",
+      commitmentText:
+        "We are committed to maximising energy generation from wind resources while minimising environmental impact and ensuring reliable grid-connected performance.",
+    },
+
+    // infographics: [
+    //   { icon: "💨", label: "Wind Projects" },
+    //   { icon: "⚡", label: "MW Installed" },
+    //   { icon: "🌍", label: "Eco Certified" },
+    //   { icon: "🔧", label: "24/7 Support" },
+    // ],
+    infographicsImage: "/images/your-infographic.jpg",
+
+
+    overviewCard: {
+      title: "Solutions Overview",
+      bullets: [
+        "Site feasibility & wind studies",
+        "Turnkey EPC delivery",
+        "Post-commissioning O&M",
+      ],
+    },
+
+    mediaType: "image",
+    mediaSrc: "/images/about.png",
+
+    manufacturingTitle: "Wind Technology",
+    manufacturingParagraph:
+      "Our wind technology partnerships bring globally proven turbine platforms to Indian conditions. From low-wind-speed sites to high-altitude installations, we tailor rotor diameter, hub height, and control algorithms to extract maximum annual energy production. Each project is backed by bankable energy yield assessments and independent engineering reviews to secure financing and long-term revenue certainty.",
+  },
+
+  commercial: {
+    mainTitle: "Commercial & Industrial (C&I)",
+    subtitle: "Powering Industry with Renewable Energy",
+    introParagraph:
+      "Delivering 75MW+ of rooftop and ground-mounted solar installations for leading industrial and commercial enterprises across India. Our C&I solutions are designed to reduce energy costs, improve sustainability ratings, and provide energy security for high-demand facilities.",
+
+    topCards: [
+      {
+        title: "Tailored Design",
+        bullets: [
+          "Custom load analysis & sizing",
+          "Rooftop and ground-mount options",
+          "Seamless grid and DG integration",
+        ],
+      },
+      {
+        title: "Financial Benefits",
+        bullets: [
+          "Up to 30% reduction in electricity bills",
+          "Accelerated depreciation benefits",
+          "Transparent ROI modelling",
+        ],
+      },
+    ],
+
+    featureCard: {
+      title: "Key Features",
+      bullets: [
+        "Fast-track project execution",
+        "Net metering & open access",
+        "OPEX and CAPEX models",
+        "Dedicated account management",
+      ],
+      commitmentSubtitle: "Our Commitment",
+      commitmentText:
+        "We deliver bankable C&I renewable solutions that align with corporate sustainability goals while generating measurable financial returns from day one.",
+    },
+
+    // infographics: [
+    //   { icon: "🏭", label: "C&I Projects" },
+    //   { icon: "💰", label: "Cost Savings" },
+    //   { icon: "🌱", label: "Carbon Avoided" },
+    //   { icon: "📊", label: "Live Monitoring" },
+    // ],
+    infographicsImage: "/images/your-infographic.jpg",
+
+
+    overviewCard: {
+      title: "Solutions Overview",
+      bullets: [
+        "Energy audit & feasibility",
+        "Engineering, procurement & construction",
+        "Ongoing performance monitoring",
+      ],
+    },
+
+    mediaType: "image",
+    mediaSrc: "/images/about.png",
+
+    manufacturingTitle: "C&I Solar Technology",
+    manufacturingParagraph:
+      "Our commercial and industrial installations employ premium bifacial modules, string inverters, and intelligent monitoring platforms to ensure peak performance across diverse industrial environments. We handle all statutory approvals, net metering applications, and grid connectivity requirements, providing a truly turnkey experience. Our portfolio includes manufacturing plants, warehouses, IT parks, hospitals, and educational institutions across India.",
+  },
+
+  storage: {
+    mainTitle: "Energy Storage Systems",
+    subtitle: "Reliable Power, Round the Clock",
+    introParagraph:
+      "Deploying utility-scale and behind-the-meter battery energy storage systems that enhance grid stability, enable renewable integration, and ensure uninterrupted power for critical loads. Our BESS solutions are engineered to deliver precise power and energy management across diverse applications.",
+
+    topCards: [
+      {
+        title: "System Design",
+        bullets: [
+          "Application-specific cell chemistry",
+          "Scalable modular architecture",
+          "Advanced BMS & EMS integration",
+        ],
+      },
+      {
+        title: "Safety & Compliance",
+        bullets: [
+          "IEC 62619 & UL 9540 certified",
+          "Fire suppression systems",
+          "Continuous thermal monitoring",
+        ],
+      },
+    ],
+
+    featureCard: {
+      title: "Key Features",
+      bullets: [
+        "Peak shaving & load shifting",
+        "Frequency regulation support",
+        "Seamless solar + BESS coupling",
+        "Remote diagnostics & control",
+      ],
+      commitmentSubtitle: "Our Commitment",
+      commitmentText:
+        "We are committed to delivering storage solutions that maximise renewable utilisation, reduce grid dependency, and provide long-term asset reliability with transparent performance guarantees.",
+    },
+
+    // infographics: [
+    //   { icon: "🔋", label: "MWh Deployed" },
+    //   { icon: "⚡", label: "Peak Shaved" },
+    //   { icon: "✅", label: "Safety Certified" },
+    //   { icon: "📡", label: "Remote Monitoring" },
+    // ],
+    infographicsImage: "/images/your-infographic.jpg",
+
+
+    overviewCard: {
+      title: "Solutions Overview",
+      bullets: [
+        "System sizing & bankability studies",
+        "Turnkey BESS installation",
+        "Performance-based O&M contracts",
+      ],
+    },
+
+    mediaType: "image",
+    mediaSrc: "/images/about.png",
+
+    manufacturingTitle: "Battery Technology",
+    manufacturingParagraph:
+      "We partner with globally certified battery manufacturers to source lithium iron phosphate (LFP) and NMC cells that balance energy density, cycle life, and safety. Our in-house engineering team integrates power conversion systems, transformer skids, and SCADA platforms into complete turnkey BESS packages. Every installation undergoes rigorous factory acceptance testing and on-site commissioning verification before handover, ensuring performance guarantees are met from the first cycle.",
+  },
+
+  maintenance: {
+    mainTitle: "Operations & Maintenance",
+    subtitle: "Maximising Asset Performance Across the Lifecycle",
+    introParagraph:
+      "Managing 1,000+ renewable energy assets across India with data-driven O&M services that consistently exceed contractual performance ratios. Our integrated operations model combines preventive maintenance schedules, predictive analytics, and rapid response teams to protect asset value throughout the project lifetime.",
+
+    topCards: [
+      {
+        title: "Preventive Maintenance",
+        bullets: [
+          "Scheduled inspection protocols",
+          "Thermal imaging & drone surveys",
+          "Cleaning and vegetation management",
+        ],
+      },
+      {
+        title: "Performance Monitoring",
+        bullets: [
+          "Real-time SCADA dashboards",
+          "AI-driven fault detection",
+          "Monthly generation reports",
+        ],
+      },
+    ],
+
+    featureCard: {
+      title: "Key Features",
+      bullets: [
+        "24/7 remote monitoring centre",
+        "Rapid field response teams",
+        "Spare parts inventory management",
+        "Contractual PR guarantees",
+      ],
+      commitmentSubtitle: "Our Commitment",
+      commitmentText:
+        "We are committed to delivering O&M excellence that protects investor returns, extends equipment life, and maintains safe, reliable renewable energy generation year after year.",
+    },
+
+    // infographics: [
+    //   { icon: "🏗️", label: "Assets Managed" },
+    //   { icon: "📈", label: "Avg. Uptime" },
+    //   { icon: "🔍", label: "Fault Detection" },
+    //   { icon: "🛡️", label: "PR Guaranteed" },
+    // ],
+    infographicsImage: "/images/your-infographic.jpg",
+
+
+    overviewCard: {
+      title: "Solutions Overview",
+      bullets: [
+        "Comprehensive O&M contracts",
+        "Performance ratio optimisation",
+        "End-of-life asset management",
+      ],
+    },
+
+    mediaType: "image",
+    mediaSrc: "/images/about.png",
+
+    manufacturingTitle: "O&M Technology",
+    manufacturingParagraph:
+      "Our proprietary Asset Performance Management (APM) platform aggregates data from inverters, weather stations, and energy meters to provide a single-pane-of-glass view across an entire portfolio. Machine learning algorithms analyse historical generation patterns to predict failures before they occur, reducing unplanned downtime by up to 40%. Our field technicians are certified by leading OEMs and supported by a centralised spare-parts logistics network to ensure the fastest possible mean-time-to-repair across all sites.",
+  },
+};
+
+// ─── Static Content Sections Component ───────────────────────────────────────
+function StaticSolutionSections({ solutionKey }) {
+  const content = staticSolutionContent[solutionKey];
+  if (!content) return null;
+
+  return (
+    <div className="w-full">
+      {/* 1. Main Title (center) + Subtitle (left) + Intro Paragraph */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 text-[#293E52]">
+          {content.mainTitle}
+        </h1>
+        <h3 className="text-lg sm:text-xl font-semibold text-left text-[#293E52] mb-2">
+          {content.subtitle}
+        </h3>
+        <p className="text-sm sm:text-base text-gray-600 leading-relaxed w-full">
+          {content.introParagraph}
+        </p>
+      </section>
+
+      {/* 2. Two Grid Cards – title + bullets, outlined */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {content.topCards.map((card, i) => (
+            <div
+              key={i}
+              className="border border-gray-200 rounded-lg p-5 sm:p-6 bg-white"
+            >
+              <h4 className="text-base sm:text-lg font-bold text-[#293E52] mb-3 text-left">
+                {card.title}
+              </h4>
+              <ul className="space-y-2">
+                {card.bullets.map((b, j) => (
+                  <li key={j} className="flex items-start gap-2 text-sm text-gray-700">
+                    <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#3CA948] flex-shrink-0" />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. Left: Feature Card | Right: Infographics 2x2 grid */}
+{/* 3. Left: Feature Card | Right: Image */}
+<section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    {/* Left feature card */}
+    <div className="border border-gray-200 rounded-lg p-5 sm:p-6 bg-white">
+      <h4 className="text-base sm:text-lg font-bold text-[#293E52] mb-3 text-left">
+        {content.featureCard.title}
+      </h4>
+      <ul className="space-y-2 mb-5">
+        {content.featureCard.bullets.map((b, i) => (
+          <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+            <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#3CA948] flex-shrink-0" />
+            {b}
+          </li>
+        ))}
+      </ul>
+      <h5 className="text-sm font-bold text-[#293E52] mb-2 text-left">
+        {content.featureCard.commitmentSubtitle}
+      </h5>
+      <p className="text-sm text-gray-600 leading-relaxed">
+        {content.featureCard.commitmentText}
+      </p>
+    </div>
+
+    {/* Right: single image */}
+    <div className="relative w-full h-64 sm:h-80 lg:h-full min-h-[260px] rounded-lg overflow-hidden border border-gray-200">
+      <Image
+        src={content.infographicsImage}
+        alt="Infographics"
+        fill
+        className="object-cover"
+      />
+    </div>
+  </div>
+</section>
+
+      {/* 4. Left: Overview Card | Right: Image or Video */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+          {/* Left overview card */}
+          <div className="border border-gray-200 rounded-lg p-5 sm:p-6 bg-white">
+            <h4 className="text-base sm:text-lg font-bold text-[#293E52] mb-3 text-left">
+              {content.overviewCard.title}
+            </h4>
+            <ul className="space-y-2">
+              {content.overviewCard.bullets.map((b, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                  <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#3CA948] flex-shrink-0" />
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Right media */}
+          <div className="rounded-lg overflow-hidden border border-gray-200 bg-black">
+            {content.mediaType === "video" ? (
+              <video
+                src={content.mediaSrc}
+                controls
+                className="w-full h-56 sm:h-64 object-cover"
+              />
+            ) : (
+              <div className="relative w-full h-56 sm:h-64">
+                <Image
+                  src={content.mediaSrc}
+                  alt="Solution media"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Manufacturing / Technology Title (left) + Full-width paragraph */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <h2 className="text-xl sm:text-2xl font-bold text-left text-[#293E52] mb-3">
+          {content.manufacturingTitle}
+        </h2>
+        <p className="text-sm sm:text-base text-gray-600 leading-relaxed w-full">
+          {content.manufacturingParagraph}
+        </p>
+      </section>
+    </div>
+  );
+}
+
+// ─── Key map: API solution ID → static content key ───────────────────────────
+// Update these mappings to match your actual API data_uniq_id values.
+const SOLUTION_KEY_MAP = {
+  solar: "solar",
+  wind: "wind",
+  commercial: "commercial",
+  storage: "storage",
+  maintenance: "maintenance",
+  // Add more mappings as needed, e.g. "uuid-abc-123": "solar"
+};
+
+function getStaticKey(solutionId, solutionName) {
+  if (SOLUTION_KEY_MAP[solutionId]) return SOLUTION_KEY_MAP[solutionId];
+  // fallback: match by name
+  const name = (solutionName || "").toLowerCase();
+  if (name.includes("solar")) return "solar";
+  if (name.includes("wind")) return "wind";
+  if (name.includes("commercial") || name.includes("industrial")) return "commercial";
+  if (name.includes("storage")) return "storage";
+  if (name.includes("maintenance") || name.includes("operation")) return "maintenance";
+  return null;
+}
+
+// ─── Main Page Content ────────────────────────────────────────────────────────
+function SolutionInnerContent() {
+  const searchParams = useSearchParams();
+  const solutionId = searchParams.get("id");
+
+  const [solution, setSolution] = useState(null);
+  const [projects, setProjects] = useState([]);
+  const [allSolutions, setAllSolutions] = useState([]);
+  const [relatedSolutions, setRelatedSolutions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [noData, setNoData] = useState(false);
+
+  const fetchSolutionsList = async () => {
+    try {
+      const res = await axiosGet.get("masters/solutions/get/?web_sts=1");
+      setAllSolutions(res.data.data);
+    } catch (err) {
+      console.error("Solutions List Error:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSolutionsList();
+  }, []);
+
+  const loadSolution = async (id) => {
+    setLoading(true);
+    setNoData(false);
+    try {
+      const res = await axiosGet.get(
+        `/masters/solutions/content/get/?solution_id=${id}&web_sts=1`
+      );
+      const root = res.data.data?.[0];
+      if (!root || !root.data) {
+        setNoData(true);
+        setSolution(null);
+        return;
+      }
+      setSolution({
+        title: root.solution_name,
+        sub_title: root.sub_title || "",
+      });
+    } catch (err) {
+      console.error("Solution Load Error:", err);
+      setNoData(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (solutionId) loadSolution(solutionId);
+  }, [solutionId]);
+
+  const fetchProjects = async () => {
+    try {
+      const res = await axiosGet.get(`masters/projects/get/?web_sts=1`);
+      const formatted = res.data.data.map((p) => ({
+        image: p.image_path ? BASE_URL + p.image_path : "/images/about.png",
+        title: p.project_title || p.title || "Project",
+        location: p.location || "",
+        capacity: p.capacity || "",
+      }));
+      setProjects(formatted);
+    } catch (err) {
+      console.error("Projects Error:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  useEffect(() => {
+    if (!solution || allSolutions.length === 0) return;
+    const filtered = allSolutions.filter((s) => s.data_uniq_id !== solutionId);
+    const formatted = filtered.slice(0, 3).map((s) => ({
+      imgSrc: s.image_path ? BASE_URL + s.image_path : "/images/default.png",
+      subtitle: s.title,
+      description: s.description || "Explore this solution",
+      link: `/solutions-details?id=${s.data_uniq_id}`,
+    }));
+    setRelatedSolutions(formatted);
+  }, [allSolutions, solution]);
+
+  if (loading) {
+    return (
+      <div className="w-full py-20 text-center text-[#293E52] text-lg font-semibold">
+        Loading...
+      </div>
+    );
+  }
+
+  if (noData) {
+    return (
+      <div className="w-full py-20 text-center text-red-600 text-lg font-semibold">
+        No Data Found
+      </div>
+    );
+  }
+
+  if (!solution) return null;
+
+  const staticKey = getStaticKey(solutionId, solution.title);
+
+  return (
+    <>
+      <InnerBannersol title={solution.title} bgImage="/images/sol-inner.png" />
+
+      <main className="w-full">
+        {/* ── STATIC SECTIONS (per solution) ── */}
+        {staticKey && <StaticSolutionSections solutionKey={staticKey} />}
+
+        {/* ── PROJECTS (API) ── */}
+        {projects.length > 0 && (
+          <div className="bg-[#F6F6F6]">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+              <h2 className="text-2xl sm:text-3xl font-bold text-left mb-8 text-[#1A202C]">
+                Our Projects
+              </h2>
+              <ProjectsSlider projects={projects} />
+            </div>
+          </div>
+        )}
+
+        {/* ── GO BACK ── */}
+        <div className="bg-[#F6F6F6]">
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <Link
+              href="/solutions"
+              className="inline-flex items-center gap-2 text-[#293E52] hover:text-[#3CA948] font-semibold transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              Go back to Solutions
+            </Link>
+          </div>
+        </div>
+
+        {/* ── RELATED SOLUTIONS (API) ── */}
+        {relatedSolutions.length > 0 && (
+          <div className="bg-[#F6F6F6]">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+              <h2 className="text-2xl sm:text-3xl font-bold text-left mb-8 text-[#1A202C]">
+                Related Solutions
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedSolutions.map((card, i) => (
+                  <div
+                    key={i}
+                    className="bg-white border border-gray-200 rounded-lg p-5 sm:p-6 transform transition-all duration-300 ease-in-out hover:scale-[1.03] hover:shadow-lg"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <Image
+                        src={card.imgSrc}
+                        alt={card.subtitle}
+                        width={48}
+                        height={48}
+                        className="w-10 sm:w-12 h-10 sm:h-12 object-contain"
+                      />
+                      <Link
+                        href={card.link}
+                        className="text-blue-600 hover:text-[#3CA948] transition-colors"
+                      >
+                        <ExternalLink className="w-6 sm:w-7 h-6 sm:h-7 flex-shrink-0" />
+                      </Link>
+                    </div>
+                    <p className="text-base sm:text-lg font-semibold text-[#293E52] mb-3">
+                      {card.subtitle}
+                    </p>
+                    <p
+                      className="text-sm sm:text-base text-gray-600 leading-relaxed line-clamp-4"
+                      dangerouslySetInnerHTML={{ __html: card.description }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+    </>
+  );
+}
+
+export default function SolutionInnerPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          Loading...
+        </div>
+      }
+    >
+      <SolutionInnerContent />
+    </Suspense>
+  );
+}
