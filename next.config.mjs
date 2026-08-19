@@ -9,6 +9,7 @@
 
 export default {
     output: 'export',
+    trailingSlash: true,
     experimental: {
         appDir: true,
     },
