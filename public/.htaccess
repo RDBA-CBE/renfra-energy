@@ -1,0 +1,15 @@
+DirectoryIndex index.html
+
+RewriteEngine On
+RewriteBase /
+
+# Serve the static export for clean URLs on direct requests and refreshes.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
+RewriteRule ^(.+?)/?$ $1/index.html [L]
+
+# Allow routes exported as directories to work without a trailing slash.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
+RewriteRule ^(.+?)$ $1/index.html [L]
