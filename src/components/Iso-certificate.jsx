@@ -9,7 +9,7 @@ const isoData = [
     title: "ISO 9001:2015 Annex",
     title1: "Quality Management System ",
     subtitle: "Turnkey Projects and O&M",
-    pdf: "/images/document/ISO-9001-Annex-RENFRA.pdf",
+    pdf: "/images/document/ISO-9001-2015-Annex.pdf",
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const isoData = [
     title: "ISO 9001:2015 Certificate",
     title1: "Quality Management System ",
     subtitle: "Turnkey Projects and O&M",
-    pdf: "/images/document/ISO-9001-Cert-Copy-RENFRA.pdf",
+    pdf: "/images/document/ISO-9001-2015-Certificate.pdf",
   },
   {
     id: 3,
@@ -25,7 +25,7 @@ const isoData = [
     title: "ISO 14001:2015 Annex",
     title1: "Environment Management",
     subtitle: "Turnkey Projects and O&M",
-    pdf: "/images/document/ISO-14001-Annex-RENFRA.pdf",
+    pdf: "/images/document/ISO-4001-2015-Annex.pdf",
   },
   {
     id: 4,
@@ -33,7 +33,7 @@ const isoData = [
     title: "ISO 14001:2015 Certificate",
     title1: "Environment Management",
     subtitle: "Turnkey Projects and O&M",
-    pdf: "/images/document/ISO-14001-Cert-Copy-RENFRA.pdf",
+    pdf: "/images/document/ISO-14001-2015-Certificate.pdf",
   },
   {
     id: 5,
@@ -41,7 +41,7 @@ const isoData = [
     title: "ISO 45001:2018 Annex",
     title1: "Occupational Health & Safety ",
     subtitle: "Turnkey Projects and O&M",
-    pdf: "/images/document/ISO-45001-Annex-RENFRA.pdf",
+    pdf: "/images/document/ISO-45001-2018-Annex.pdf",
   },
   {
     id: 6,
@@ -49,7 +49,7 @@ const isoData = [
     title: "ISO 45001:2018 Certificate",
     title1: "Occupational Health & Safety ",
     subtitle: "Turnkey Projects and O&M",
-    pdf: "/images/document/ISO-45001-Cert-Copy-RENFRA.pdf",
+    pdf: "/images/document/ISO-45001-2018-Certificate.pdf",
   },
   {
     id: 7,
