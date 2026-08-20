@@ -135,7 +135,7 @@ export function ContactForm() {
     /(tinyurl|bit\.ly|rebrand\.ly|is\.gd|cutt\.ly|cli\.gs|t\.co|goo\.gl|ow\.ly|buff\.ly|su\.pr|vc\.ru|adf\.ly|rb\.gy|shorturl\.at)/i;
 
   const API_CONFIG = {
-    endpoint: "/api/contact",
+    endpoint: "/api/contact/",
     smtp_username: "renfrawebsite@gmail.com",
     smtp_password: "yret dile jjkk kowo",
     company_email: "renfrawebsite@gmail.com",
