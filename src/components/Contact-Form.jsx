@@ -97,7 +97,7 @@
 
 "use client";
 
-import { useState, useRef  } from "react";
+import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Button } from "@/components/ui/button";
 
@@ -135,7 +135,7 @@ export function ContactForm() {
     /(tinyurl|bit\.ly|rebrand\.ly|is\.gd|cutt\.ly|cli\.gs|t\.co|goo\.gl|ow\.ly|buff\.ly|su\.pr|vc\.ru|adf\.ly|rb\.gy|shorturl\.at)/i;
 
   const API_CONFIG = {
-    endpoint: "renfrawebsite@gmail.com", //Use your endpoint, for now  we have added dummy email
+    endpoint: "/api/contact",
     smtp_username: "renfrawebsite@gmail.com",
     smtp_password: "yret dile jjkk kowo",
     company_email: "renfrawebsite@gmail.com",
@@ -320,19 +320,19 @@ export function ContactForm() {
       });
 
       // Reset form
-     setFormData({
-  name: "",
-  phone: "",
-  email: "",
-  message: "",
-  company: "",
-  website_url: "",
-});
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        message: "",
+        company: "",
+        website_url: "",
+      });
 
-setCaptchaToken(null);
-setIsAccepted(false);
-setFirstInteraction(0);
-recaptchaRef.current?.reset();
+      setCaptchaToken(null);
+      setIsAccepted(false);
+      setFirstInteraction(0);
+      recaptchaRef.current?.reset();
 
     } catch (error) {
       setSubmitStatus({
@@ -413,11 +413,11 @@ recaptchaRef.current?.reset();
           </div>
 
           {/* reCAPTCHA */}
-         <ReCAPTCHA
-  ref={recaptchaRef}
-  sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-  onChange={(token) => setCaptchaToken(token)}
-/>
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6Lfqvi8tAAAAAPpExCBznfhp24mh7KcmM3rVXQc9"}
+            onChange={(token) => setCaptchaToken(token)}
+          />
 
           {/* Terms */}
           <div className="flex gap-2 text-sm">
@@ -426,37 +426,36 @@ recaptchaRef.current?.reset();
               checked={isAccepted}
               onChange={(e) => setIsAccepted(e.target.checked)}
             />
-<span>
-  I accept the{" "}
-  <a 
-    href="/terms&conditions" 
-    className="text-blue-600 underline hover:text-blue-800"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Terms & Conditions
-  </a>
-</span>
+            <span>
+              I accept the{" "}
+              <a
+                href="/terms&conditions"
+                className="text-blue-600 underline hover:text-blue-800"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Terms & Conditions
+              </a>
+            </span>
           </div>
 
           {/* Status Message */}
           {submitStatus && (
             <div
-              className={`p-4 rounded-md ${
-                submitStatus.success ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-              }`}
+              className={`p-4 rounded-md ${submitStatus.success ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                }`}
             >
               {submitStatus.message}
             </div>
           )}
 
-         <Button
-  type="submit"
-  disabled={isSubmitting || !isAccepted || !captchaToken}
-  className="bg-[#1A60A4] text-white w-[180px]"
->
-  {isSubmitting ? "Sending..." : "Request A Call Back"}
-</Button>
+          <Button
+            type="submit"
+            disabled={isSubmitting || !isAccepted || !captchaToken}
+            className="bg-[#1A60A4] text-white w-[180px]"
+          >
+            {isSubmitting ? "Sending..." : "Request A Call Back"}
+          </Button>
 
         </form>
       </div>
