@@ -1688,7 +1688,7 @@ function CategoryTree({ nodes, depth, onDownload, onVideoPlay }) {
   const headerBgInactive = depth === 0 ? "bg-[#F4F4F4] hover:bg-[#E2E2E2]" : "bg-white hover:bg-gray-50";
 
   return (
-    <div className={depth === 0 ? "w-full" : "divide-y divide-gray-100 bg-white"}>
+    <div className={depth === 0 ? "w-full  space-y-4" : "divide-y divide-gray-100 bg-white"}>
       {nodes.map((node) => {
         const hasChildren = node.children && node.children.length > 0;
         // For files display: only show non-video files in the document tree
@@ -1713,7 +1713,7 @@ function CategoryTree({ nodes, depth, onDownload, onVideoPlay }) {
         }
 
         return (
-          <div key={node.id} className={`${wrapperClass} ${depth === 0 ? "border-b border-gray-200" : ""}`}>
+          <div key={node.id} className={`${wrapperClass} ${depth === 0 ? "" : ""}`}>
             <button
               id={`tree-trigger-${node.id}`}
               onClick={() => toggle(node.id)}
@@ -1736,7 +1736,7 @@ function CategoryTree({ nodes, depth, onDownload, onVideoPlay }) {
             </button>
 
             {isOpen && (
-              <div className={depth === 0 ? "bg-white" : ""}>
+              <div className={depth === 0 ? "bg-white mt-2 mb-2" : ""}>
                 {hasChildren && (
                   <CategoryTree
                     nodes={node.children}
