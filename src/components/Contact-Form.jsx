@@ -97,8 +97,7 @@
 
 "use client";
 
-import { useState, useRef } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 
 export function ContactForm() {
@@ -117,13 +116,23 @@ export function ContactForm() {
     message: "",
   });
 
-  const recaptchaRef = useRef(null);
-
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAccepted, setIsAccepted] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState(null);
   const [submitStatus, setSubmitStatus] = useState(null);
+
+  const generateMath = useCallback(() => {
+    const a = Math.floor(Math.random() * 10) + 1;
+    const b = Math.floor(Math.random() * 10) + 1;
+    return { a, b, answer: a + b };
+  }, []);
+
+  const [mathQuestion, setMathQuestion] = useState({ a: 0, b: 0, answer: 0 });
+
+  useEffect(() => {
+    setMathQuestion(generateMath());
+  }, [generateMath]);
+  const [mathInput, setMathInput] = useState("");
+  const [mathError, setMathError] = useState("");
 
   // BOT PROTECTION VALUES
   const [firstInteraction, setFirstInteraction] = useState(0);
@@ -229,12 +238,11 @@ export function ContactForm() {
       return;
     }
 
-    // Check reCAPTCHA
-    if (!captchaToken) {
-      setSubmitStatus({
-        success: false,
-        message: "Please verify reCAPTCHA",
-      });
+    // Check Math CAPTCHA
+    if (parseInt(mathInput) !== mathQuestion.answer) {
+      setMathError("Incorrect answer. Please try again.");
+      setMathQuestion(generateMath());
+      setMathInput("");
       return;
     }
 
@@ -289,7 +297,7 @@ export function ContactForm() {
         smtp_username: API_CONFIG.smtp_username,
         smtp_password: API_CONFIG.smtp_password,
       };
-
+// 
       await sendEmail(companyEmailData);
 
       // SEND CONFIRMATION EMAIL TO USER
@@ -329,10 +337,11 @@ export function ContactForm() {
         website_url: "",
       });
 
-      setCaptchaToken(null);
       setIsAccepted(false);
       setFirstInteraction(0);
-      recaptchaRef.current?.reset();
+      setMathQuestion(generateMath());
+      setMathInput("");
+      setMathError("");
 
     } catch (error) {
       setSubmitStatus({
@@ -412,12 +421,20 @@ export function ContactForm() {
             {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
           </div>
 
-          {/* reCAPTCHA */}
-          <ReCAPTCHA
-            ref={recaptchaRef}
-            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6Lfqvi8tAAAAAPpExCBznfhp24mh7KcmM3rVXQc9"}
-            onChange={(token) => setCaptchaToken(token)}
-          />
+          {/* Math CAPTCHA */}
+          <div>
+            <label className="text-sm text-gray-600">
+              Solve : {mathQuestion.a} + {mathQuestion.b}?
+            </label>
+            <input
+              type="number"
+              value={mathInput}
+              onChange={(e) => { setMathInput(e.target.value); setMathError(""); }}
+              placeholder="Your answer"
+              className="w-full rounded-md bg-[#F2F3F4] px-4 py-3 mt-1"
+            />
+            {mathError && <p className="text-red-500 text-sm mt-1">{mathError}</p>}
+          </div>
 
           {/* Terms */}
           <div className="flex gap-2 text-sm">
@@ -451,7 +468,7 @@ export function ContactForm() {
 
           <Button
             type="submit"
-            disabled={isSubmitting || !isAccepted || !captchaToken}
+            disabled={isSubmitting || !isAccepted || !mathInput}
             className="bg-[#1A60A4] text-white w-[180px]"
           >
             {isSubmitting ? "Sending..." : "Request A Call Back"}
