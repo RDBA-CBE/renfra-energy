@@ -1651,7 +1651,7 @@ function CategoryTree({ nodes, depth, onDownload, onVideoPlay }) {
 
   useEffect(() => {
     if (nodes && nodes.length > 0) {
-      setOpenId(nodes[0].id);
+      setOpenId((prev) => prev || nodes[0].id);
     }
   }, [nodes]);
 
@@ -1663,40 +1663,25 @@ function CategoryTree({ nodes, depth, onDownload, onVideoPlay }) {
 
   const headerPadding =
     depth === 0
-      ? "px-5 sm:px-6 py-4"
+      ? "px-5 py-4"
       : depth === 1
-        ? "px-6 sm:px-8 py-3.5"
-        : "pl-10 sm:pl-14 pr-6 py-3.5";
+        ? "px-6 py-3.5"
+        : "pl-10 pr-6 py-3";
 
   const headerTextSize =
     depth === 0
-      ? "text-sm sm:text-sm md:text-base lg:text-base uppercase tracking-wider font-bold"
+      ? "text-sm md:text-base font-bold  "
       : depth === 1
-        ? "text-xs sm:text-sm md:text-base font-bold tracking-wide"
-        : "sm:text-xs md:text-sm lg:text-sm font-semibold tracking-wide";
+        ? "text-sm font-bold"
+        : "text-xs font-semibold";
 
-  const activeHeaderTextClass = depth === 0 ? "text-[#000] font-black" : "text-[#000] font-extrabold";
-  const inactiveHeaderTextClass = depth === 0 ? "text-[#3e5973] font-medium" : "text-gray-700";
-
-  const wrapperClass =
-    depth === 0
-      ? ""
-      : depth === 1
-        ? "border-b border-gray-100 last:border-0"
-        : "";
-
-  const headerBgInactive = depth === 0 ? "bg-[#F4F4F4] hover:bg-[#E2E2E2]" : "bg-white hover:bg-gray-50";
+  const wrapperClass = depth === 0 ? "space-y-3" : "space-y-2";
 
   return (
-    <div className={depth === 0 ? "w-full  space-y-4" : "divide-y divide-gray-100 bg-white"}>
+    <div className={wrapperClass}>
       {nodes.map((node) => {
         const hasChildren = node.children && node.children.length > 0;
-        // For files display: only show non-video files in the document tree
-        const docFiles = (node.files || []).filter((f) => {
-          const ft = (f.fileType || "").toLowerCase();
-
-          return ft === "pdf";
-        });
+        const docFiles = (node.files || []).filter((f) => (f.fileType || "").toLowerCase() === "pdf");
         const hasFiles = docFiles.length > 0;
         const isExpandable = hasChildren || hasFiles;
         const isOpen = openId === node.id;
@@ -1705,38 +1690,35 @@ function CategoryTree({ nodes, depth, onDownload, onVideoPlay }) {
           return (
             <div
               key={node.id}
-              className={`${headerPadding} flex justify-between items-center ${depth === 0 ? "rounded-xl bg-[#F4F4F4]" : ""}`}
+              className={`${headerPadding} flex items-center justify-between rounded-2xl border border-[#edf2ee] bg-[#f6faf7]`}
             >
-              <span className={`${headerTextSize} ${inactiveHeaderTextClass}`}>{node.label}</span>
+              <span className={`${headerTextSize} text-[#1d3a45]`}>{node.label}</span>
             </div>
           );
         }
 
         return (
-          <div key={node.id} className={`${wrapperClass} ${depth === 0 ? "" : ""}`}>
+          <div key={node.id} className="rounded-2xl border border-[#edf2ee] bg-[#f6faf7] overflow-hidden">
             <button
               id={`tree-trigger-${node.id}`}
               onClick={() => toggle(node.id)}
-              className={`w-full text-left ${headerPadding} flex justify-between items-center transition-colors duration-150 focus:outline-none group rounded-xl ${isOpen ? "bg-[#d5caca]" : headerBgInactive}`}
+              className={`flex w-full items-center justify-between ${headerPadding} text-left transition-colors duration-200 ${
+                isOpen ? "bg-[#eaf6f0]" : "bg-transparent hover:bg-[#eef8f3]"
+              }`}
             >
-              <span className={`${headerTextSize} ${isOpen ? activeHeaderTextClass : inactiveHeaderTextClass}`}>
+              <span className={`${headerTextSize} ${isOpen ? "text-[#123e4e]" : "text-[#1d3a45]"}`}>
                 {node.label}
               </span>
-              <div>
-                {isOpen ? (
-                  <ChevronUp
-                    className={`stroke-[1.8px] ${depth === 0 ? "w-4 h-4 text-white" : depth === 1 ? "w-4 h-4 text-white" : "w-3.5 h-3.5 text-white"}`}
-                  />
-                ) : (
-                  <ChevronDown
-                    className={`stroke-[1.5px] ${depth === 0 ? "w-4 h-4 text-gray-600" : depth === 1 ? "w-4 h-4 text-gray-400" : "w-3.5 h-3.5 text-gray-500"}`}
-                  />
-                )}
-              </div>
+
+              {isOpen ? (
+                <ChevronUp className="h-4 w-4 text-[#1d6a57]" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-[#5d7b80]" />
+              )}
             </button>
 
             {isOpen && (
-              <div className={depth === 0 ? "bg-white mt-2 mb-2" : ""}>
+              <div className="border-t border-[#edf2ee] bg-white p-3 sm:p-4">
                 {hasChildren && (
                   <CategoryTree
                     nodes={node.children}
@@ -1747,50 +1729,22 @@ function CategoryTree({ nodes, depth, onDownload, onVideoPlay }) {
                 )}
 
                 {hasFiles && (
-                  <div
-                    className={
-                      depth === 0
-                        ? "bg-[#d5caca] divide-y divide-gray-200 rounded-xl overflow-hidden transition-all duration-200"
-                        : "bg-[#d5caca] border-t border-gray-200 rounded-xl"
-                    }
-                  >
+                  <div className="mt-3 space-y-2">
                     {docFiles.map((doc) => (
                       <div
                         key={doc.id}
                         onClick={() => onDownload(doc)}
-                        className={
-                          depth === 0
-                            ? "px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-colors cursor-pointer group select-none"
-                            : "pl-12 sm:pl-20 pr-6 py-4 flex items-center justify-between gap-3 transition-colors cursor-pointer group select-none border-b border-gray-300 last:border-b-0"
-                        }
+                        className="group flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-[#edf2ee] bg-[#f9fbfa] px-3 py-2.5 transition-colors hover:border-[#bfe3d1] hover:bg-[#f1fbf4]"
                       >
-                        <div className="text-left flex items-center gap-1.5 focus:outline-none">
-                          {depth === 0 ? (
-                            <>
-                              <div className="mt-0.5 md:mt-0 mr-3.5 flex items-center justify-center shrink-0">
-                                <svg
-                                  className="w-[15px] h-[15px] text-[#000] transition-transform group-hover:translate-y-[1px]"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2.8"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <path d="M12 5v13M5 12l7 7 7-7" />
-                                  <path d="M4 21h16" />
-                                </svg>
-                              </div>
-                              <span className="text-xs sm:text-sm font-bold text-[#000] underline decoration-transparent group-hover:decoration-[#293E52] transition-colors duration-200 leading-normal">
-                                {doc.name}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="text-[11px] sm:text-[13px] text-[#000] font-medium group-hover:text-[#293E52] underline decoration-transparent group-hover:decoration-[#293E52] transition-colors leading-relaxed">
-                              ↓ {doc.name}
-                            </span>
-                          )}
+                        <div className="flex min-w-0 items-center gap-3">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#eaf6f0] text-[#1d6a57]">
+                            <FileText className="h-4 w-4" />
+                          </div>
+                          <span className="truncate text-sm font-medium text-[#1d3a45] group-hover:text-[#123e4e]">
+                            {doc.name}
+                          </span>
                         </div>
+                        <Download className="h-4 w-4 shrink-0 text-[#1d6a57]" />
                       </div>
                     ))}
                   </div>
@@ -1836,14 +1790,14 @@ function VideosSection({ treeVideoFiles, loading, error, onPlay }) {
   }
 
   return (
-    // Always 2 columns on md+, 1 column on mobile
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full max-w-[1200px]">
+    <div className="grid w-full max-w-[1200px] grid-cols-1 gap-5 md:grid-cols-2">
       {allVideos.map((video) => (
-        <VideoCard
-          key={video.id}
-          video={video}
-          onClick={() => onPlay(video)}
-        />
+        <div key={video.id} className="overflow-hidden rounded-[22px] border border-[#edf2ee] bg-[#f7faf8] shadow-sm transition-transform hover:-translate-y-0.5">
+          <VideoCard
+            video={video}
+            onClick={() => onPlay(video)}
+          />
+        </div>
       ))}
     </div>
   );
@@ -1943,6 +1897,38 @@ function NewInvestorSectionInner() {
     ? hasDocumentTree(activeTabData.tree)
     : false;
 
+  const documentCount = activeTabData
+    ? activeTabData.tree.reduce((total, node) => {
+        const countNode = (currentNode) => {
+          const pdfFiles = (currentNode.files || []).filter(
+            (file) => (file.fileType || "").toLowerCase() === "pdf"
+          ).length;
+          const childCount = (currentNode.children || []).reduce(
+            (sum, child) => sum + countNode(child),
+            0
+          );
+          return pdfFiles + childCount;
+        };
+        return total + countNode(node);
+      }, 0)
+    : 0;
+
+  const categoryCount = activeTabData
+    ? activeTabData.tree.reduce((total, node) => {
+        const countNode = (currentNode) => {
+          const childCount = (currentNode.children || []).reduce(
+            (sum, child) => sum + countNode(child),
+            0
+          );
+          return 1 + childCount;
+        };
+        return total + countNode(node);
+      }, 0)
+    : 0;
+
+  const sidebarCategories = activeTabData
+    ? activeTabData.tree.slice(0, 5).map((node) => node.label).filter(Boolean)
+    : [];
 
   const triggerDownload = (doc) => {
     if (!doc || !doc.src) {
@@ -1970,239 +1956,185 @@ function NewInvestorSectionInner() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#333333] antialiased flex flex-col">
-      {/* Toast Notification */}
+    <div className="min-h-screen  text-[#1f2d2a] antialiased flex flex-col">
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#222222] text-white px-5 py-3 rounded shadow-lg flex items-center gap-2.5 text-xs font-semibold tracking-wider uppercase animate-fade-in border border-gray-700">
+        <div className="fixed bottom-6 right-6 z-50 bg-[#0f172a] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-2.5 text-[11px] font-bold tracking-[0.18em] uppercase border border-white/10">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
           <span>{toastMessage}</span>
         </div>
       )}
 
-      <div className="max-w-[1350px] w-full mx-auto px-4 md:px-8 py-6 md:py-10 flex-grow flex flex-col bg-white">
+      <div className="mx-auto w-full max-w-[1350px] flex-grow px-4 py-6 md:px-8 md:py-10">
+        <header className="overflow-hidden rounded-[28px] border border-[#dfece4] bg-white shadow-[0_18px_45px_rgba(15,59,55,0.06)]">
+          <div className="border-b border-[#edf2ee] bg-gradient-to-r from-[#eaf6f0] via-white to-[#eef8f5] px-5 py-6 sm:px-7 lg:px-9">
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <span className="inline-flex items-center rounded-full border border-[#bfe3d1] bg-[#e8f9ef] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.23em] text-[#1f6a57]">
+                  Investor Relations
+                </span>
+                <h1 className="mt-4 text-2xl font-black tracking-[-0.04em]  text-2xl sm:text-3xl font-bold text-[#1A202C] ">
+                  {activeTabData ? activeTabData.title : "Investor Relations"}
+                </h1>
+              </div>
 
-        {/* Navigation */}
-        <nav className="mb-8 md:mb-12 border-b border-b-transparent lg:border-gray-100 pb-2">
-          {/* Desktop Navigation */}
-          {/* <div className="hidden lg:flex items-start flex-wrap gap-y-3 sm:gap-y-4 text-xs md:text-sm font-black select-none no-scrollbar">
-            {tabsData.map((tab, idx) => {
-              const isTabActive = activeTab === tab.id;
-              return (
-                <div key={tab.id} className="flex items-start self-start">
-                  {idx > 0 && (
-                    <span className="text-gray-300 font-normal mx-3 select-none text-3xl md:text-4xl">|</span>
-                  )}
-                  <button
-                    id={`tab-button-${tab.id}`}
-                    onClick={() => handleTabChange(tab.id)}
-                    className={`flex flex-col justify-start uppercase transition-all duration-200 outline-none hover:opacity-85 text-left text-[18px] sm:text-[20px] md:text-lg lg:text-[20px] leading-tight cursor-pointer ${isTabActive
-                      ? "bg-gradient-to-r from-[#329ACD] to-[#3AB257] bg-clip-text text-transparent font-black"
-                      : "text-[#293E52] font-semibold"
-                      }`}
-                  >
-                    <>
-                      {tab.label.toUpperCase().includes("DRHP") && (
-                        <>
-                          <span>DRHP</span>
-                          <span>DOCUMENTS</span>
-                        </>
-                      )}
-
-                      {tab.label === "RHP" && (
-                        <>
-                          <span>RHP</span>
-                          <span>DOCUMENTS</span>
-                        </>
-                      )}
-
-                      {tab.label === "MANAGEMENT" && <span>MANAGEMENT</span>}
-
-                      {tab.label === "REG 46" && (
-                        <>
-                          <span>REG</span>
-                          <span>46</span>
-                        </>
-                      )}
-
-                      {tab.label === "FINANCIALS" && <span>FINANCIALS</span>}
-
-                      {tab.label === "INVESTOR CONTACTS" && (
-                        <>
-                          <span>INVESTOR</span>
-                          <span>CONTACTS</span>
-                        </>
-                      )}
-
-                      {tab.label === "SEBI AVS" && (
-                        <>
-                          <span>SEBI</span>
-                          <span>AVS</span>
-                        </>
-                      )}
-
-                      {tab.label === "STOCK EXCHANGE COMPLIANCE" && (
-                        <>
-                          <span>STOCK EXCHANGE</span>
-                          <span>COMPLIANCE</span>
-                        </>
-                      )}
-                    </>                  </button>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl border border-[#dfece4] bg-[#123e4e] px-4 py-3">
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-white">Categories</div>
+                  <div className="mt-2 text-2xl font-black text-white">{categoryCount || 0}</div>
                 </div>
-              );
-            })}
-          </div> */}
-
-          <div className="hidden lg:flex items-start flex-wrap gap-y-3 sm:gap-y-4 text-xs md:text-sm font-black select-none no-scrollbar">
-            {tabsData.map((tab, idx) => {
-              const isTabActive = activeTab === tab.id;
-
-              // Split the title into words
-              const words = tab.label.trim().split(/\s+/);
-
-              let firstLine = "";
-              let secondLine = "";
-
-              switch (words.length) {
-                case 1:
-                  firstLine = words[0];
-                  break;
-
-                case 2:
-                  firstLine = words[0];
-                  secondLine = words[1];
-                  break;
-
-                case 3:
-                  firstLine = words.slice(0, 2).join(" ");
-                  secondLine = words[2];
-                  break;
-
-                case 4:
-                  firstLine = words.slice(0, 2).join(" ");
-                  secondLine = words.slice(2).join(" ");
-                  break;
-
-                default:
-                  // 5 or more words
-                  firstLine = words.slice(0, 2).join(" ");
-                  secondLine = words.slice(2).join(" ");
-              }
-
-              return (
-                <div key={tab.id} className="flex items-start self-start">
-                  {idx > 0 && (
-                    <span className="text-gray-300 font-normal mx-3 select-none text-3xl md:text-4xl">
-                      |
-                    </span>
-                  )}
-
-                  <button
-                    id={`tab-button-${tab.id}`}
-                    onClick={() => handleTabChange(tab.id)}
-                    className={`flex flex-col justify-start uppercase transition-all duration-200 outline-none hover:opacity-85 text-left text-[18px] sm:text-[20px] md:text-lg lg:text-[20px] leading-tight cursor-pointer ${isTabActive
-                      ? "bg-gradient-to-r from-[#329ACD] to-[#3AB257] bg-clip-text text-transparent font-black"
-                      : "text-[#293E52] font-semibold"
-                      }`}
-                  >
-                    <span>{firstLine}</span>
-                    {secondLine && <span>{secondLine}</span>}
-                  </button>
+                <div className="rounded-2xl border border-[#dfece4] bg-[#123e4e] px-4 py-3">
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-white">Documents</div>
+                  <div className="mt-2 text-2xl font-black text-white">{documentCount || 0}</div>
                 </div>
-              );
-            })}
+                <div className="rounded-2xl border border-[#dfece4] bg-[#123e4e] px-4 py-3 sm:col-span-1 col-span-2">
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-white">Videos</div>
+                  <div className="mt-2 text-2xl font-black text-white">{treeVideoFiles.length || 0}</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Mobile Dropdown Navigation */}
-          <div className="block lg:hidden relative w-full mb-6 select-none">
-            <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="sm:w-[500px] md:w-[700px] bg-[#EDEDED] text-gray-700 font-bold uppercase tracking-wider text-xs sm:text-sm py-4 px-6 flex justify-between items-center rounded-lg border border-gray-300 focus:outline-none transition-colors hover:bg-[#E2E2E2]"
-            >
-              <span>{activeTabData ? activeTabData.label : ""}</span>
-              <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`} />
-            </button>
-            {isDropdownOpen && (
-              <div className="sm:w-[500px] md:w-[700px] absolute left-0 right-0 mt-1 z-40 bg-[#EDEDED] border border-gray-300 rounded-lg p-5 flex flex-col gap-3 shadow-md">
+          <div className="px-5 py-5 sm:px-7 lg:px-9">
+            <nav className="mb-5">
+              <div className="hidden lg:flex flex-wrap gap-3">
                 {tabsData.map((tab) => {
                   const isTabActive = activeTab === tab.id;
                   return (
                     <button
                       key={tab.id}
-                      onClick={() => {
-                        handleTabChange(tab.id);
-                        setIsDropdownOpen(false);
-                      }}
-                      className={`text-left uppercase font-bold tracking-wider text-[11px] sm:text-xs transition-colors duration-150 focus:outline-none py-1 ${isTabActive ? "text-[#293E52]" : "text-gray-500 hover:text-gray-700"
-                        }`}
+                      id={`tab-button-${tab.id}`}
+                      onClick={() => handleTabChange(tab.id)}
+                      className={`rounded-full border px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] transition-all duration-200 ${
+                        isTabActive
+                          ? "border-[#2f9d7a] bg-[#2f9d7a] text-white shadow-md"
+                          : "border-[#dfece4] bg-[#f6faf7] text-[#204b5d] hover:border-[#b8d9c9] hover:bg-white"
+                      }`}
                     >
                       {tab.label}
                     </button>
                   );
                 })}
               </div>
-            )}
-          </div>
-        </nav>
 
-        {/* Title */}
-        <header className="mb-8">
-          <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold uppercase tracking-tight text-gray-800">
-            {activeTabData ? activeTabData.title : ""}
-          </h1>
+              <div className="block lg:hidden">
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="flex w-full items-center justify-between rounded-2xl border border-[#dfece4] bg-[#f6faf7] px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.18em] text-[#204b5d]"
+                >
+                  <span>{activeTabData ? activeTabData.label : "Investor Section"}</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                {isDropdownOpen && (
+                  <div className="mt-2 space-y-2 rounded-2xl border border-[#dfece4] bg-white p-3 shadow-lg">
+                    {tabsData.map((tab) => {
+                      const isTabActive = activeTab === tab.id;
+                      return (
+                        <button
+                          key={tab.id}
+                          onClick={() => {
+                            handleTabChange(tab.id);
+                            setIsDropdownOpen(false);
+                          }}
+                          className={`block w-full rounded-xl px-3 py-2 text-left text-[11px] font-bold uppercase tracking-[0.18em] transition-colors ${
+                            isTabActive ? "bg-[#e8f9ef] text-[#1f6a57]" : "text-[#204b5d] hover:bg-[#f6faf7]"
+                          }`}
+                        >
+                          {tab.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </nav>
+          </div>
         </header>
 
-        {/* Main Content */}
-        <main className="flex-grow w-full max-w-[1250px]">
+        <main className="mt-8 flex-grow w-full">
           {loading && (
-            <div className="py-10 text-center text-gray-400 text-sm font-medium tracking-wider uppercase">
+            <div className="rounded-[28px] border border-[#dfece4] bg-white px-6 py-12 text-center text-sm font-bold uppercase tracking-[0.2em] text-[#67838f]">
               Loading...
             </div>
           )}
 
           {!loading && loadError && (
-            <div className="py-10 text-center text-red-500 text-sm font-medium">
+            <div className="rounded-[28px] border border-red-200 bg-red-50 px-6 py-12 text-center text-sm font-bold uppercase tracking-[0.2em] text-red-600">
               Failed to load data: {loadError}
             </div>
           )}
 
+          {!loading && !loadError && activeTabData && (
+            <div className="grid gap-8 ">
+              {/* <aside className="rounded-[28px] border border-[#dfece4] bg-white p-5 shadow-[0_20px_40px_rgba(15,59,55,0.04)]">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#5d7b80]">Quick access</h2>
+                  <span className="rounded-full bg-[#eaf6f0] px-2 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#1f6a57]">
+                    {sidebarCategories.length}
+                  </span>
+                </div>
 
+                <div className="space-y-2">
+                  {sidebarCategories.length > 0 ? (
+                    sidebarCategories.map((item, index) => (
+                      <div
+                        key={`${item}-${index}`}
+                        className="flex items-center gap-3 rounded-2xl border border-[#edf2ee] bg-[#f6faf7] px-3 py-2.5 text-sm font-medium text-[#1d3a45]"
+                      >
+                        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#dff5ea] text-[11px] font-black text-[#1d6a57]">
+                          {index + 1}
+                        </span>
+                        <span className="truncate">{item}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="rounded-2xl border border-dashed border-[#dfece4] bg-[#f6faf7] px-3 py-4 text-sm text-[#67838f]">
+                      No quick links available
+                    </div>
+                  )}
+                </div>
+              </aside> */}
 
-          {(treeVideoFiles.length > 0) && (
-            <div className="mb-10">
+              <div className="space-y-8">
+                {(treeVideoFiles.length > 0) && (
+                  <section className="rounded-[28px] border border-[#dfece4] bg-white p-4 shadow-[0_20px_40px_rgba(15,59,55,0.04)] sm:p-5">
+                    <div className="mb-5 flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#5d7b80]">Media</p>
+                        <h2 className="mt-1 text-xl font-black text-[#123e4e]">Videos & presentations</h2>
+                      </div>
+                    </div>
 
+                    <VideosSection
+                      treeVideoFiles={treeVideoFiles}
+                      onPlay={handleVideoPlay}
+                    />
+                  </section>
+                )}
 
-              <VideosSection
-                treeVideoFiles={treeVideoFiles}
-                onPlay={handleVideoPlay}
-              />
+                {hasDocuments && (
+                  <section className="rounded-[28px] border border-[#dfece4] bg-white p-4 shadow-[0_20px_40px_rgba(15,59,55,0.04)] sm:p-5">
+                    <div className="mb-5 flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#5d7b80]">Library</p>
+                        <h2 className="mt-1 text-xl font-black text-[#123e4e]">Downloads & reports</h2>
+                      </div>
+                    </div>
+
+                    <CategoryTree
+                      nodes={activeTabData.tree}
+                      depth={0}
+                      onDownload={triggerDownload}
+                      onVideoPlay={handleVideoPlay}
+                    />
+                  </section>
+                )}
+              </div>
             </div>
           )}
-
-          {/* ── DOCUMENTS SECTION ──────────────────────────────────────────────
-              Only non-video files are shown here.
-              Video-type files are pulled out and shown in the Videos section above.
-          ──────────────────────────────────────────────────────────────────── */}
-          {!loading &&
-            !loadError &&
-            activeTabData &&
-            hasDocuments && (
-              <CategoryTree
-                nodes={activeTabData.tree}
-                depth={0}
-                onDownload={triggerDownload}
-                onVideoPlay={handleVideoPlay}
-              />
-            )}
-
-          {/* {!loading && !loadError && (!activeTabData || activeTabData.tree.length === 0) && treeVideoFiles.length === 0 && (
-            <div className="py-10 text-center text-gray-400 text-sm font-medium tracking-wider uppercase">
-              No data available
-            </div>
-          )} */}
         </main>
       </div>
 
-      {/* Video Modal */}
       {activeVideo && (
         <VideoModal
           video={activeVideo}

@@ -9,6 +9,9 @@ import SolutionsRenfra from "@/components/Renfra-Solution";
 import { TestimonialsSection } from "@/components/Testimonials";
 import VideoBannerSection, { VideoBanner } from "@/components/Video-Banner";
 import Image from "next/image";
+import { TestimonialsNew } from "@/components/TestimonialNew";
+import ClientLogos from "@/components/ClientLogos";
+import ClientLogosGrid from "@/components/ClientLogosGrid";
 
 export default function Home() {
   return (
@@ -22,7 +25,11 @@ export default function Home() {
 {/* <OurProjects /> */}
 <OurProjectsSection />
 {/* <NewsMedia /> */}
-<TestimonialsSection />
+
+<TestimonialsNew/>
+{/* <TestimonialsSection /> */}
+<ClientLogos />
+{/* <ClientLogosGrid /> */}
 {/* <CareerSection /> */}
 <CTA />
 
