@@ -404,7 +404,7 @@ export default function OMPage() {
           </svg>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Hero Text */}
             <div className="lg:col-span-6 z-10">
@@ -467,7 +467,7 @@ export default function OMPage() {
           SECTION 2: O&M PORTFOLIO
           ========================================== */}
       <section className="w-full py-16 sm:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             {/* Left Content */}
             <div className="lg:col-span-5">
@@ -517,7 +517,7 @@ export default function OMPage() {
           SECTION 3: OPERATIONAL FOOTPRINT
           ========================================== */}
       <section className="w-full py-16 sm:py-20 bg-[#fafcfb] border-t border-slate-100 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             {/* Left: Tamil Nadu Map with 24 Markers & Solar Landscape Photo */}
             <div className="lg:col-span-6 relative">
@@ -612,7 +612,7 @@ export default function OMPage() {
           SECTION 4: TEAM & ORGANIZATIONAL CAPABILITY
           ========================================== */}
       <section className="w-full py-16 sm:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             {/* Left Content */}
             <div className="lg:col-span-6">
@@ -670,7 +670,7 @@ export default function OMPage() {
           SECTION 5: CORE O&M ACTIVITIES
           ========================================== */}
       <section className="w-full py-16 sm:py-20 bg-[#fafcfb] border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeaderTag text="CORE O&M ACTIVITIES" />
           <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#293E52] leading-tight mb-8">
             Maintenance That Keeps Your Assets Performing
@@ -761,7 +761,7 @@ export default function OMPage() {
           SECTION 6: SPECIALIZED SERVICES & TESTING
           ========================================== */}
       <section className="w-full py-16 sm:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12">
             {/* Left Column: Specialized Inspection Services */}
             <div className="space-y-4">
@@ -882,7 +882,7 @@ export default function OMPage() {
           SECTION 7: TESTING APPROACH & EXPERIENCE SUMMARY
           ========================================== */}
       <section className="w-full py-16 sm:py-20 bg-[#fafcfb] border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-8 items-stretch">
             {/* Left Box: In-House & Third-Party Testing Flow */}
             <div className="lg:col-span-7 bg-white border border-slate-200/80 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">

@@ -668,7 +668,7 @@ function SolutionInnerContent() {
         {/* SECTION 1: TOP HERO (OUR SOLUTIONS)                      */}
         {/* ========================================================= */}
         <section className="w-full pt-8 sm:pt-12 md:pt-14 pb-8 sm:pb-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
               
               {/* Left Column: Heading, Headline, Description */}
@@ -716,7 +716,7 @@ function SolutionInnerContent() {
 
         {(currentSolution.introLines?.length > 0 || currentSolution.showManufacturing) && (
           <section className="w-full pb-10 sm:pb-14">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
               {currentSolution.introLines?.map((paragraph, index) => (
                 <p
                   key={`intro-${index}`}
@@ -735,7 +735,7 @@ function SolutionInnerContent() {
         {/* SECTION 2: PANORAMIC BANNER WITH STATS CARD               */}
         {/* ========================================================= */}
         <section className="w-full mb-12 sm:mb-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative w-full h-[180px] sm:h-[200px] md:h-[220px] rounded-3xl overflow-hidden shadow-md">
               {/* Background panoramic image */}
               <Image
@@ -813,7 +813,7 @@ function SolutionInnerContent() {
         {/* SECTION 3: END-TO-END SOLUTIONS (3-COLUMN CARDS GRID)    */}
         {/* ========================================================= */}
         <section className="w-full pb-16 sm:pb-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
             
             {/* Header: Green line + Title */}
             <div className="mb-8">
@@ -855,7 +855,7 @@ function SolutionInnerContent() {
         {/* ========================================================= */}
         {projects.length > 0 && (
           <section className="bg-[#F8FAFC] py-12 border-t border-slate-200/60">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
               <h3 className="text-2xl sm:text-3xl font-extrabold text-left mb-8 text-[#1A202C]">
                 Our Projects
               </h3>
@@ -868,7 +868,7 @@ function SolutionInnerContent() {
         {/* SECTION 5: GO BACK TO SOLUTIONS LINK                      */}
         {/* ========================================================= */}
         <div className="bg-[#fff]">
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="w-full max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Link
               href="/solutions"
               className="inline-flex items-center gap-2 text-[#293E52] hover:text-[#3CA948] font-bold text-sm transition-colors"
@@ -884,7 +884,7 @@ function SolutionInnerContent() {
         {/* ========================================================= */}
         {relatedSolutions.length > 0 && (
           <section className="bg-[#fff] pb-16">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
               <h3 className="text-2xl sm:text-3xl font-extrabold text-left mb-8 text-[#1A202C]">
                 Related Solutions
               </h3>

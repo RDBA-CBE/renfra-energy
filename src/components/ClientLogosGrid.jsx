@@ -18,7 +18,7 @@ export default function ClientLogosGrid({ limit, showViewAll = false }) {
         <div className="absolute bottom-10 right-10 w-64 h-64 rounded-full bg-sky-50 blur-[80px] opacity-60" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <div className="text-center mb-12">
@@ -53,7 +53,7 @@ export default function ClientLogosGrid({ limit, showViewAll = false }) {
                 alt={logo.alt}
                 width={120}
                 height={56}
-                className="relative object-contain max-h-10 w-auto transition-all duration-300"
+                className="relative object-contain max-h-20 w-auto transition-all duration-300"
               />
             </div>
           ))}

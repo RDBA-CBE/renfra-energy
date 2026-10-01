@@ -61,9 +61,9 @@ export default function NewsMedia() {
       <InnerBanner title="Media & News" bgImage="/images/news-ban.png" />
 
       <main className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 py-12">
           {/* Tab Navigation */}
-          {/* <div className="flex justify-center gap-4 mb-12">
+          <div className="flex justify-center gap-4 mb-12">
             <button
               onClick={() => setActiveTab("news")}
               className={`px-8 py-2 rounded-full font-medium transition-colors cursor-pointer ${
@@ -84,12 +84,12 @@ export default function NewsMedia() {
             >
               Media
             </button>
-          </div> */}
+          </div>
 
           {/* Tab Content */}
-          {/* {activeTab === "news" && <NewsSection />}
-          {activeTab === "media" && <MediaSection />} */}
-          <LinkedInPosts />
+          {activeTab === "news" && <NewsSection />}
+          {activeTab === "media" && <MediaSection />}
+          {/* <LinkedInPosts /> */}
         </div>
       </main>
     </>

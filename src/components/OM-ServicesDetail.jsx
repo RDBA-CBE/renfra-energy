@@ -234,7 +234,7 @@ export default function OMServicesDetail() {
     <div className="w-full bg-white text-slate-800">
       {/* Top Banner Navigation Bar */}
       <div className="bg-[#f0f9ff] border-b border-[#e0f2fe] py-4 sticky top-16 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold uppercase tracking-wider text-[#329ACD]">
               O&amp;M Scope of Work
@@ -288,7 +288,7 @@ export default function OMServicesDetail() {
           SECTION 1: PREVENTIVE MAINTENANCE BREAKDOWN
           ========================================== */}
       <section id="preventive" className="w-full py-16 sm:py-20 bg-white border-b border-slate-100 scroll-mt-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeaderTag text="SECTION 6.1" />
           <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#293E52] leading-tight mb-4">
             Preventive Maintenance: Scope &amp; Activities
@@ -325,7 +325,7 @@ export default function OMServicesDetail() {
           SECTION 2: PERFORMANCE MONITORING & ANALYTICS
           ========================================== */}
       <section id="analytics" className="w-full py-16 sm:py-20 bg-[#fafcfb] border-b border-slate-100 scroll-mt-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeaderTag text="SECTION 6.3" />
           <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#293E52] leading-tight mb-4">
             Performance Monitoring &amp; Analytics
@@ -360,7 +360,7 @@ export default function OMServicesDetail() {
           SECTION 3: DRONE THERMOGRAPHY & IV CURVE TESTING
           ========================================== */}
       <section id="drone-iv" className="w-full py-16 sm:py-20 bg-white border-b border-slate-100 scroll-mt-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Left: Drone Thermography */}
             <div className="space-y-6">
@@ -446,7 +446,7 @@ export default function OMServicesDetail() {
           SECTION 4: ELECTRICAL EQUIPMENT & RELAY TESTING
           ========================================== */}
       <section id="electrical" className="w-full py-16 sm:py-20 bg-[#fafcfb] border-b border-slate-100 scroll-mt-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeaderTag text="SECTIONS 9 & 10" />
           <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#293E52] leading-tight mb-4">
             Electrical Equipment Testing &amp; Health Assessment
@@ -514,7 +514,7 @@ export default function OMServicesDetail() {
           SECTION 5: MICRO-PCB REPAIR & ELECTRONIC SERVICES
           ========================================== */}
       <section id="pcb" className="w-full py-16 sm:py-20 bg-white border-b border-slate-100 scroll-mt-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeaderTag text="SECTION 11" />
           <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#293E52] leading-tight mb-4">
             Micro-PCB Repair &amp; Electronic Services
@@ -549,7 +549,7 @@ export default function OMServicesDetail() {
           SECTION 6: TESTING DELIVERY MODEL & SITE TEAMS
           ========================================== */}
       <section className="w-full py-16 sm:py-20 bg-[#fafcfb] border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-12">
             {/* Left: 5-Step Testing Delivery Model */}
             <div className="lg:col-span-7">
@@ -622,7 +622,7 @@ export default function OMServicesDetail() {
           SECTION 7: COMPLETE PORTFOLIO SUMMARY TABLE
           ========================================== */}
       <section id="portfolio" className="w-full py-16 sm:py-20 bg-white scroll-mt-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeaderTag text="SECTIONS 3 & 13" />
           <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#293E52] leading-tight mb-4">
             Key Experience &amp; Portfolio Summary

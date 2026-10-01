@@ -12,6 +12,7 @@ import Image from "next/image";
 import { TestimonialsNew } from "@/components/TestimonialNew";
 import ClientLogos from "@/components/ClientLogos";
 import ClientLogosGrid from "@/components/ClientLogosGrid";
+import RenfraSolutionNew from "@/components/RenfraSolutionNew";
 
 export default function Home() {
   return (
@@ -19,7 +20,8 @@ export default function Home() {
 {/* <VideoBanner /> */}
 <VideoBannerSection />
 <AboutUsSection />
-<SolutionsRenfra />
+<RenfraSolutionNew/>
+{/* <SolutionsRenfra /> */}
 {/* <SolutionsSection /> */}
 {/* <ProjectHomeSection /> */}
 {/* <OurProjects /> */}

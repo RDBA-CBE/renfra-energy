@@ -129,7 +129,7 @@
 
 //   return (
 //     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+//       <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
 //         <div className="flex justify-between items-center h-20">
 
 //           {/* Logo */}
@@ -431,7 +431,15 @@ function NavbarContent() {
           "masters/solutions/get/?web_sts=1&active_status=1&order_type=asc&order_field=created_date"
         );
         console.log("[v0] Solutions Response:", response.data);
-        setSolutions(response.data?.data || []);
+        setSolutions(
+          (response.data?.data || []).filter(
+            (item) =>
+              !item.title?.toLowerCase().includes("operations") &&
+              !item.title?.toLowerCase().includes("maintenance") &&
+              !item.title?.toLowerCase().includes("o&m") &&
+              !item.title?.toLowerCase().includes("o & m")
+          )
+        );
       } catch (error) {
         console.error("Navbar Solutions Error:", error);
         setSolutions([]);

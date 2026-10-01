@@ -13,7 +13,7 @@ export default function ClientLogos() {
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#329ACD] via-[#3AB257] to-[#329ACD]" />
 
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
+      <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
         <div className="flex items-center justify-center gap-3 mb-3">
           <span className="w-10 h-[2px] bg-gradient-to-r from-[#329ACD] to-[#3AB257] inline-block" />
           <span className="text-xs font-bold uppercase tracking-widest text-[#3AB257]">

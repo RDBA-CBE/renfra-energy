@@ -31,7 +31,7 @@ const testimonials = [
     "designation": "Mr. Premanand, Partner",
     "date": "09.12.2025",
     "is_verified": true,
-    "feedback": "Kudos to the Renfra team for all their support for our project. The project delivery commitments were honored without any deviations or delays. The commissioning of the project on date is highly appreciated and a special mention and thanks to the team for their support.",
+    "feedback": "Kudos to the Renfra team for all their support for our project. The project delivery commitments were honored without any deviations or delays. The commissioning of the project on date is highly appreciated and a special mention and thanks to the team for their support. Kudos to the Renfra team for all their support for our project. The project delivery commitments were honored without any deviations or delays. The commissioning of the project on date is highly appreciated and a special mention and thanks to the team for their support. Kudos to the Renfra team for all their support for our project. The project delivery commitments were honored without any deviations or delays. The commissioning of the project on date is highly appreciated and a special mention and thanks to the team for their support.",
     "overall_satisfaction": 92,
     "ratings": [
       {
@@ -594,11 +594,11 @@ function TestimonialCard({ testimonial, position }) {
         <div
           className="
             pl-6
-            text-[11px]
-            sm:text-[12px]
+            text-[12px]
+            sm:text-[14px]
             text-slate-600
             leading-relaxed
-            line-clamp-3
+            line-clamp-4
           "
           dangerouslySetInnerHTML={{
             __html: feedback,
@@ -608,7 +608,7 @@ function TestimonialCard({ testimonial, position }) {
 
       {/* ───────────────── Ratings ───────────────── */}
 
-      <div
+      {/* <div
         className={`
           mt-5
           grid
@@ -631,7 +631,7 @@ function TestimonialCard({ testimonial, position }) {
             />
           ),
         )}
-      </div>
+      </div> */}
 
       {/* ───────────────── Footer ───────────────── */}
 
@@ -1067,7 +1067,7 @@ export function TestimonialsNew() {
 <div
   className="
     relative
-    max-w-7xl
+    max-w-[85rem] 2xl:max-w-[90rem]
     mx-auto
     px-0
     sm:px-8

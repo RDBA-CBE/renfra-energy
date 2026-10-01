@@ -23,9 +23,16 @@ export function TabSolutionSection() {
         "masters/solutions/get/?web_sts=1&active_status=1&order_type=asc&order_field=created_date"
       );
       const tabs = response.data.data;
-      setTabsData(tabs);
-      if (tabs.length > 0) {
-        fetchContentData(tabs[0].data_uniq_id);
+      const filtered = (tabs || []).filter(
+        (item) =>
+          !item.title?.toLowerCase().includes("operations") &&
+          !item.title?.toLowerCase().includes("maintenance") &&
+          !item.title?.toLowerCase().includes("o&m") &&
+          !item.title?.toLowerCase().includes("o & m")
+      );
+      setTabsData(filtered);
+      if (filtered.length > 0) {
+        fetchContentData(filtered[0].data_uniq_id);
       }
     } catch (err) {
       console.error("Tabs Error:", err);
@@ -99,7 +106,7 @@ export function TabSolutionSection() {
 
   return (
     <section className="w-full bg-[#fff] py-10 sm:py-14 lg:py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+      <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 mb-8">
 
         {/* ── TOP ROW: Heading left | Tabs right ──────────────────────────── */}
         <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-12 mb-10 sm:mb-12">

@@ -1964,7 +1964,7 @@ function NewInvestorSectionInner() {
         </div>
       )}
 
-      <div className="mx-auto w-full max-w-[1350px] flex-grow px-4 py-6 md:px-8 md:py-10">
+      <div className="mx-auto w-full max-w-[85rem] 2xl:max-w-[90rem] flex-grow px-4 py-6 md:px-8 md:py-10">
         <header className="overflow-hidden rounded-[28px] border border-[#dfece4] bg-white shadow-[0_18px_45px_rgba(15,59,55,0.06)]">
           <div className="border-b border-[#edf2ee] bg-gradient-to-r from-[#eaf6f0] via-white to-[#eef8f5] px-5 py-6 sm:px-7 lg:px-9">
             <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">

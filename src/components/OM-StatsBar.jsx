@@ -10,7 +10,7 @@ const stats = [
 
 export default function OMStatsBar() {
   return (
-    <div className="relative z-20 -mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
+    <div className="relative z-20 -mt-8 max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-4">
       <div className="bg-white rounded-2xl shadow-xl border border-slate-100 px-6 py-5">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
           {stats.map((s, i) => {
