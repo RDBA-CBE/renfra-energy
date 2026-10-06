@@ -5,7 +5,7 @@ import Image from "next/image"
 
 export default function CTA() {
   return (
-    <section className="w-[90%] mx-auto mt-16 mb-70">
+    <section className="w-[90%] mx-auto mt-6 mb-10 md:mt-16 md:mb-70">
       <div className="relative rounded-3xl overflow-hidden min-h-[320px] flex items-center">
 
         {/* Background image */}
@@ -35,14 +35,14 @@ export default function CTA() {
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black text-white leading-tight mb-4">
+            <h2 className="text-2xl lg:text-3xl sm:text-4xl lg:text-[2.75rem] font-black text-white leading-tight mb-4">
               Ready to Switch to <br className="hidden sm:block" />
               <span className="bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent">
                 Clean Energy?
               </span>
             </h2>
 
-            <p className="text-slate-300 text-base md:text-lg max-w-md leading-relaxed">
+            <p className="text-slate-300 text-sm lg:text-lg max-w-md leading-relaxed">
               Our experts are ready to design the perfect solar or wind solution for your needs. Get in touch today.
             </p>
           </div>
@@ -51,7 +51,7 @@ export default function CTA() {
           <div className="shrink-0 flex flex-col items-center gap-4">
             <Link
               href="/contact"
-              className="group inline-flex items-center gap-3 bg-gradient-to-r from-[#3AB257] to-[#329ACD] hover:opacity-90 text-white font-bold text-base px-9 py-4 rounded-full shadow-xl shadow-[#3AB257]/30 transition-all duration-200 hover:scale-105"
+              className="group inline-flex items-center gap-3 bg-gradient-to-r from-[#3AB257] to-[#329ACD] hover:opacity-90 text-white font-bold text-sm lg:text-base px-9 py-2 lg:py-4 rounded-full shadow-xl shadow-[#3AB257]/30 transition-all duration-200 hover:scale-105"
             >
               Contact Us
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors">
@@ -61,7 +61,7 @@ export default function CTA() {
               </span>
             </Link>
 
-            <p className="text-slate-400 text-xs">No commitment. Free consultation.</p>
+            <p className="text-white text-xs">No commitment. Free consultation.</p>
           </div>
 
         </div>

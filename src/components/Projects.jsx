@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapPin } from "lucide-react";
+import { Building2, MapPin, Zap } from "lucide-react";
 import { axiosGet, BASE_URL } from "@/lib/api";
 
 const TABS_DATA = [
@@ -65,6 +65,7 @@ export default function ProjectsSection() {
   console.log(activeTab, "activeTab");
   const [loading, setLoading] = useState(true);
   const [noData, setNoData] = useState(false);
+  const [ready, setReady] = useState(false);
 
   const fetchMaster = async () => {
     try {
@@ -103,6 +104,7 @@ export default function ProjectsSection() {
   const fetchProject = async () => {
     if (!activeTab) return;
     try {
+      setReady(false);
       setLoading(true);
       const res = await axiosGet.get(
         `masters/projects/get/?web_sts=1&solution_id=${activeTab}`
@@ -110,6 +112,7 @@ export default function ProjectsSection() {
       const data = res.data?.data || [];
       setProjectData(data);
       setNoData(data.length === 0);
+      setTimeout(() => setReady(true), 50);
     } catch (err) {
       console.error("Project Error:", err);
       setNoData(true);
@@ -187,18 +190,51 @@ export default function ProjectsSection() {
 
         {/* Mosaic Grid */}
         {displayProjects.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className={`transition-all duration-1000 ease-out ${
+            ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          } ${
+            displayProjects.length === 1
+              ? "flex justify-center"
+              : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          }`}>
             {displayProjects.map((project, i) => {
               // Pattern: 0=big, 1=small, 2=small, 3=big, 4=big, 5=small (repeating)
               const pattern = [true, false, false, true, true, false];
               const isBigFeature = pattern[i % 6];
               const isCompleted = project.project_status === 3;
+              const titleCapacity = project.title?.match(/\b\d+(?:\.\d+)?\s*MW(?:h)?\b/i)?.[0];
+              const rawCapacity =
+                project.capacity ??
+                project.project_capacity ??
+                project.capacity_mw ??
+                titleCapacity;
+              const capacityUnit = /\bmwh\b/i.test(titleCapacity || "")
+                ? "MWh"
+                : "MW";
+              const capacity = rawCapacity
+                ? /\bmwh?\b/i.test(String(rawCapacity))
+                  ? rawCapacity
+                  : `${rawCapacity} ${capacityUnit}`
+                : null;
+              const projectFacts = [
+                capacity && { icon: Zap, value: capacity, featured: true },
+                (project.location || project.state) && {
+                  icon: MapPin,
+                  value: project.location || project.state,
+                },
+                (project.category || project.project_type || project.type) && {
+                  icon: Building2,
+                  value: project.category || project.project_type || project.type,
+                },
+              ].filter(Boolean);
 
               return (
                 <div
                   key={project.data_uniq_id}
                   className={`group flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-shadow duration-300 ${
-                    isBigFeature ? "sm:col-span-2" : ""
+                    displayProjects.length === 1
+                      ? "w-full max-w-4xl"
+                      : isBigFeature ? "sm:col-span-2" : ""
                   }`}
                 >
                   {/* Image half */}
@@ -215,37 +251,64 @@ export default function ProjectsSection() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                     <div className="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="absolute top-0 right-0 w-0 h-0 border-t-[44px] border-r-[44px] border-t-transparent border-r-[#3CA948]/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                    <div
+                      className={`absolute top-3 right-3 inline-flex items-center gap-2 rounded-full border border-white/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-md backdrop-blur-sm ${
+                        isCompleted ? "bg-[#16803c]" : "bg-[#1679a8]"
+                      }`}
+                    >
                       <span
-                        className={`w-2 h-2 rounded-full ${
-                          isCompleted ? "bg-[#3CA948]" : "bg-[#329ACD]"
-                        }`}
+                        className="h-2 w-2 rounded-full bg-white shadow-[0_0_0_2px_rgba(255,255,255,0.25)]"
                       />
-                      <span className="text-white/90 text-[10px] font-bold uppercase tracking-widest">
-                        {isCompleted ? "Completed" : "Ongoing"}
-                      </span>
+                      {isCompleted ? "Completed" : "Ongoing"}
                     </div>
-                    {project.location && (
+                    {/* {project.location && (
                       <div className="absolute bottom-3 left-4 flex items-center gap-1">
                         <MapPin className="w-3 h-3 text-[#3CA948] flex-shrink-0" />
                         <span className="text-[#3CA948] text-[11px] font-semibold uppercase tracking-wider">
                           {project.location}
                         </span>
                       </div>
-                    )}
+                    )} */}
                   </div>
 
                   {/* Content half — full description, no clamp */}
                   <div className="flex flex-col flex-1 p-5 sm:p-6">
                     <h3
-                      className={`font-bold text-[#293E52] leading-snug mb-3 ${
+                      className={`font-bold text-[#000] leading-snug mb-3 ${
                         isBigFeature ? "text-lg sm:text-xl" : "text-base sm:text-lg"
                       }`}
                     >
                       {project.title}
                     </h3>
+                    {projectFacts.length > 0 && (
+                      <div
+                        className={`mb-3 flex flex-wrap gap-2 ${
+                          projectFacts.length === 1 ? "justify-center" : ""
+                        }`}
+                      >
+                        {projectFacts.map(({ icon: Icon, value, featured }, index) => (
+                          <span
+                            key={`${value}-${index}`}
+                            className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-sm ${
+                              featured
+                                ? "border-[#2d9647] bg-[#3AB257] font-bold text-white shadow-sm"
+                                : "border-slate-200 bg-white font-medium text-[#293E52]"
+                            }`}
+                          >
+                            <Icon
+                              className={`h-4 w-4 shrink-0 ${
+                                featured ? "text-white" : "text-[#1e3a8a]"
+                              }`}
+                            />
+                            <span className={`font-bold  ${
+                                featured ? "text-white" : "text-[#1e3a8a]"
+                              }`}>{value}</span>
+                          </span>
+                        ))}
+                      </div>
+                    )}
                     <div
-                      className="text-sm text-gray-500 leading-relaxed"
+                      className="text-sm text-gray-800 leading-relaxed"
                       dangerouslySetInnerHTML={{ __html: project.description }}
                     />
                   </div>

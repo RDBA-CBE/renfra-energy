@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react"; // useEffect kept for auto-slider
+import Image from "next/image";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -27,71 +28,112 @@ import {
 const testimonials = [
   {
     "id": 1,
-    "company_name": "VPN Textiles",
-    "designation": "Mr. Premanand, Partner",
-    "date": "09.12.2025",
+    "company_name": "Aachi Masala Foods Pvt Ltd",
+    "logo_path": "/images/testimonials/Aachi.jpg",
+    "designation": "",
+    "date": "",
     "is_verified": true,
-    "feedback": "Kudos to the Renfra team for all their support for our project. The project delivery commitments were honored without any deviations or delays. The commissioning of the project on date is highly appreciated and a special mention and thanks to the team for their support. Kudos to the Renfra team for all their support for our project. The project delivery commitments were honored without any deviations or delays. The commissioning of the project on date is highly appreciated and a special mention and thanks to the team for their support. Kudos to the Renfra team for all their support for our project. The project delivery commitments were honored without any deviations or delays. The commissioning of the project on date is highly appreciated and a special mention and thanks to the team for their support.",
+    "feedback": "We have had a positive experience working with Renfra Energy. The team was responsive, supportive and professional in handling our requirements. The quality of work and service delivery has been good, and we've always been able to communicate our needs clearly. We also appreciate the regular updates, timely support during critical situations and their focus on health and safety. Overall, we're happy with their service and support.",
     "overall_satisfaction": 92,
     "ratings": [
-      {
-        "label": "Employee response",
-        "value": 100
-      },
-      {
-        "label": "Quality of work",
-        "value": 90
-      },
-      {
-        "label": "Communication",
-        "value": 100
-      }
+      { "label": "Employee response", "value": 100 },
+      { "label": "Quality of work", "value": 90 },
+      { "label": "Communication", "value": 100 }
     ]
   },
+
   {
     "id": 2,
-    "company_name": "Raghul Spinning Mills",
-    "designation": "Mr. P. Devaraj, Partner",
-    "date": "09.12.2025",
+    "company_name": "Indus TMT Industries Ltd",
+    "logo_path": "/images/testimonials/indus.jpg",
+    "designation": "",
+    "date": "",
     "is_verified": true,
-    "feedback": "The efficiency and availability of the plant has been very satisfactory and yielding the desired results. The team is also very responsive and the regular updates on the operation and efficiencies is highly appreciated. We would like to thank the Renfra team for their very professional attitude in handling all our queries and providing very strategic solutions to our concerns.",
+    "feedback": "Our experience with Renfra Energy has been very positive. Whenever we have questions or requirements, the team is quick to respond and easy to communicate with. We are satisfied with the quality of work and their commitment to delivering the services as agreed. The reporting process was well organised and kept us informed with regular updates. We also value the team's timely support during critical situations and their attention to workplace safety, PPE and maintaining clean working areas. The team's professional approach at our site has made our overall experience smooth and hassle-free.",
     "overall_satisfaction": 92,
     "ratings": [
-      {
-        "label": "Employee response",
-        "value": 100
-      },
-      {
-        "label": "Quality of work",
-        "value": 90
-      },
-      {
-        "label": "Communication",
-        "value": 100
-      }
+      { "label": "Employee response", "value": 100 },
+      { "label": "Quality of work", "value": 90 },
+      { "label": "Communication", "value": 100 }
     ]
   },
+
   {
     "id": 3,
-    "company_name": "Geetha Krishna Spinning Mills",
-    "designation": "Mr. M. Kanniah, Electrical Engineer",
-    "date": "09.12.2025",
+    "company_name": "Kaleesuwari Refinery",
+    "logo_path": "/images/testimonials/kaleeswari.png",
+    "designation": "",
+    "date": "",
     "is_verified": true,
-    "feedback": "The outcome of our strategic project in Moolakarai has been excellent. The project was delivered on time in high quality and the efficiency of the plant has been put in optimum use without any issues. We have also seen a substantial savings from the project.",
+    "feedback": "We've had a positive experience working with Renfra Energy. The site team has been committed throughout the project and has worked towards completing the work on time. We appreciate how promptly the team responds to our feedback and takes the necessary action. While government approvals were understandably outside the team's direct control, we found Renfra Energy proactive in managing the process and keeping things moving. Their commitment, responsiveness and end-to-end approach made our overall experience smooth and reassuring.",
     "overall_satisfaction": 92,
     "ratings": [
-      {
-        "label": "Employee response",
-        "value": 100
-      },
-      {
-        "label": "Quality of work",
-        "value": 90
-      },
-      {
-        "label": "Communication",
-        "value": 100
-      }
+      { "label": "Employee response", "value": 100 },
+      { "label": "Quality of work", "value": 90 },
+      { "label": "Communication", "value": 100 }
+    ]
+  },
+
+  {
+    "id": 4,
+    "company_name": "Abikiran Agro Farms Asia",
+    "logo_path": "/images/testimonials/abikiran.png",
+    "designation": "",
+    "date": "",
+    "is_verified": true,
+    "feedback": "We have had a good experience working with Renfra Energy. The team communicates well, delivers the work as committed and maintains good quality throughout. Employees were cooperative and responsive, which made it easy for us to share our requirements and get the support we need. We also appreciate the way reports are submitted and how the team responds during critical situations. Their focus on workplace safety, PPE requirements, cleanliness and professional conduct has made our overall experience positive.",
+    "overall_satisfaction": 92,
+    "ratings": [
+      { "label": "Employee response", "value": 100 },
+      { "label": "Quality of work", "value": 90 },
+      { "label": "Communication", "value": 100 }
+    ]
+  },
+   {
+    "id": 5,
+    "company_name": "SCM Garments Pvt Ltd",
+    "logo_path": "/images/testimonials/scm.jpg",
+    "designation": "",
+    "date": "",
+    "is_verified": true,
+    "feedback": "We appreciate the consistent support we've received from Renfra Energy. The team was cooperative and responsive, kept us regularly updated on the progress, and consistently delivered work that met our expectations. We've also had a good experience with their support during urgent situations and their approach to workplace safety and cleanliness. It was reassuring to work with a team that takes these aspects seriously.",
+    "overall_satisfaction": 92,
+    "ratings": [
+      { "label": "Employee response", "value": 100 },
+      { "label": "Quality of work", "value": 90 },
+      { "label": "Communication", "value": 100 }
+    ]
+  },
+  
+  {
+    "id": 6,
+    "company_name": "Schloss Chennai Pvt Ltd",
+    "logo_path": "/images/testimonials/scholas.png",
+    "designation": "",
+    "date": "",
+    "is_verified": true,
+    "feedback": "Renfra Energy team was responsive and attentive to our requirements. The work delivery was good and we received regular updates along the way. We also value the team's support during critical situations and their attention to safety, PPE and cleanliness at the workplace. Overall, we're pleased with the way Renfra Energy has supported us and maintained a professional approach throughout our association.",
+    "overall_satisfaction": 92,
+    "ratings": [
+      { "label": "Employee response", "value": 100 },
+      { "label": "Quality of work", "value": 90 },
+      { "label": "Communication", "value": 100 }
+    ]
+  },
+ 
+  {
+    "id": 7,
+    "company_name": "Sree Santhosh Garments",
+    "logo_path": "/images/testimonials/sree-symbol.png",
+    "designation": "",
+    "date": "",
+    "is_verified": true,
+    "feedback": "We're happy with the service from Renfra Energy. The team was supportive and responsive, with good coordination and timely assistance. Their professional approach and focus on workplace safety have made our experience positive.",
+    "overall_satisfaction": 92,
+    "ratings": [
+      { "label": "Employee response", "value": 100 },
+      { "label": "Quality of work", "value": 90 },
+      { "label": "Communication", "value": 100 }
     ]
   }
 ]
@@ -232,6 +274,7 @@ function CircularProgress({ value = 0, size = 52 }) {
 
 function TestimonialCard({ testimonial, position }) {
   const isCenter = position === "center";
+  const feedbackRef = useRef(null);
 
   const companyName =
     testimonial.company_name ||
@@ -243,6 +286,23 @@ function TestimonialCard({ testimonial, position }) {
 
   const feedback =
     testimonial.feedback || "";
+
+  useLayoutEffect(() => {
+    const feedbackElement = feedbackRef.current;
+
+    if (!feedbackElement) {
+      return;
+    }
+
+    const lineHeight = Number.parseFloat(
+      window.getComputedStyle(feedbackElement).lineHeight,
+    );
+    const collapsedHeight = lineHeight * 4;
+
+    feedbackElement.style.maxHeight = isCenter
+      ? `${feedbackElement.scrollHeight}px`
+      : `${collapsedHeight}px`;
+  }, [feedback, isCenter]);
 
   const logoPath =
     testimonial.logo_path ||
@@ -376,7 +436,7 @@ function TestimonialCard({ testimonial, position }) {
 
         ${
           isCenter
-            ? "p-6 sm:p-7"
+            ? "p-3 sm:p-7 sm:pt-4"
             : "p-4 sm:p-5"
         }
       `}
@@ -388,37 +448,40 @@ function TestimonialCard({ testimonial, position }) {
 
           {/* Logo */}
 
-          <div
-            className={`
-              rounded-xl
-              border
-              border-emerald-100
-              bg-emerald-50
-              flex
-              items-center
-              justify-center
-              shrink-0
-              overflow-hidden
-
-              ${
-                isCenter
-                  ? "w-11 h-11"
-                  : "w-9 h-9"
-              }
-            `}
-          >
-            {logoPath ? (
-              <img
+          {logoPath ? (
+            <div
+              className={`border rounded-xl overflow-hidden shrink-0 ${
+                isCenter ? "w-11 h-11 md:w-12 md:h-12" : "w-11 h-11"
+              }`}
+            >
+              <Image
                 src={logoPath}
                 alt={companyName}
-                className="
-                  w-full
-                  h-full
-                  object-contain
-                  p-1.5
-                "
+                width={44}
+                height={44}
+                className="h-full w-full scale-125 object-contain p-1"
               />
-            ) : (
+            </div>
+          ) : (
+            <div
+              className={`
+                rounded-xl
+                border
+                border-emerald-100
+                bg-emerald-50
+                flex
+                items-center
+                justify-center
+                shrink-0
+                overflow-hidden
+
+                ${
+                  isCenter
+                    ? "w-11 h-11"
+                    : "w-9 h-9"
+                }
+              `}
+            >
               <span className="
                 text-[10px]
                 font-bold
@@ -426,8 +489,8 @@ function TestimonialCard({ testimonial, position }) {
               ">
                 {initials}
               </span>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Company */}
 
@@ -592,14 +655,18 @@ function TestimonialCard({ testimonial, position }) {
         />
 
         <div
-          className="
+          ref={feedbackRef}
+          className={`
             pl-6
             text-[12px]
             sm:text-[14px]
             text-slate-600
             leading-relaxed
-            line-clamp-4
-          "
+            overflow-hidden
+            transition-[max-height]
+            duration-[650ms]
+            ease-[cubic-bezier(0.4,0,0.2,1)]
+          `}
           dangerouslySetInnerHTML={{
             __html: feedback,
           }}
@@ -635,7 +702,7 @@ function TestimonialCard({ testimonial, position }) {
 
       {/* ───────────────── Footer ───────────────── */}
 
-      <div
+      {/* <div
         className="
           mt-auto
           pt-4
@@ -647,7 +714,7 @@ function TestimonialCard({ testimonial, position }) {
           gap-3
         "
       >
-        {/* Satisfaction */}
+       
 
         <div className="
           flex
@@ -719,7 +786,7 @@ function TestimonialCard({ testimonial, position }) {
           </div>
         </div>
 
-        {/* Clean energy */}
+       
 
         {isCenter && (
           <div
@@ -750,7 +817,7 @@ function TestimonialCard({ testimonial, position }) {
             </span>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
@@ -763,8 +830,10 @@ export function TestimonialsNew() {
 
   const [centerIdx, setCenterIdx] = useState(0);
   const [isSliding, setIsSliding] = useState(false);
+  const [slideDirection, setSlideDirection] = useState(null);
   const autoRef = useRef(null);
   const slideTimeoutRef = useRef(null);
+  const touchStartRef = useRef(null);
 
 
   // ───────────────── Auto Slider ─────────────────
@@ -782,15 +851,9 @@ export function TestimonialsNew() {
     autoRef.current =
       setInterval(() => {
 
+        setSlideDirection("next");
         setCenterIdx((prev) => {
-
-          return (
-            prev + 1 >=
-            testimonials.length
-              ? 0
-              : prev + 1
-          );
-
+          return prev + 1 >= testimonials.length ? 0 : prev + 1;
         });
 
       }, 5000);
@@ -830,6 +893,7 @@ export function TestimonialsNew() {
 
   const changeSlide = (
     nextIndex,
+    direction = nextIndex > centerIdx ? "next" : "previous",
   ) => {
 
     if (
@@ -840,6 +904,7 @@ export function TestimonialsNew() {
     }
 
     setIsSliding(true);
+    setSlideDirection(direction);
 
     setCenterIdx(nextIndex);
 
@@ -872,7 +937,7 @@ export function TestimonialsNew() {
         ? 0
         : centerIdx + 1;
 
-    changeSlide(next);
+    changeSlide(next, "next");
   };
 
 
@@ -887,7 +952,7 @@ export function TestimonialsNew() {
         ? testimonials.length - 1
         : centerIdx - 1;
 
-    changeSlide(prev);
+    changeSlide(prev, "previous");
   };
 
 
@@ -902,6 +967,37 @@ export function TestimonialsNew() {
     }
 
     changeSlide(index);
+  };
+
+  const handleTouchStart = (event) => {
+    const touch = event.touches[0];
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+    };
+  };
+
+  const handleTouchEnd = (event) => {
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
+
+    if (!start) {
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - start.x;
+    const deltaY = touch.clientY - start.y;
+
+    if (Math.abs(deltaX) < 40 || Math.abs(deltaX) <= Math.abs(deltaY)) {
+      return;
+    }
+
+    if (deltaX < 0) {
+      goNext();
+    } else {
+      goPrev();
+    }
   };
 
 
@@ -959,10 +1055,10 @@ export function TestimonialsNew() {
         bg-gradient-to-b
         from-[#329ACD]
         to-[#3AB257]
-        px-4
         py-12
         sm:py-14
         md:py-16
+        px-4
       "
     >
 
@@ -970,9 +1066,10 @@ export function TestimonialsNew() {
 
       <div
         className="
-          max-w-2xl
+          max-w-[85rem] 2xl:max-w-[90rem]
           mx-auto
           text-center
+          px-8 sm:px-6 lg:px-8
           mb-8
           sm:mb-10
         "
@@ -1027,7 +1124,7 @@ export function TestimonialsNew() {
             text-2xl
             sm:text-3xl
             lg:text-[38px]
-            font-extrabold
+            font-semibold
             leading-tight
             text-white
           "
@@ -1070,7 +1167,8 @@ export function TestimonialsNew() {
     max-w-[85rem] 2xl:max-w-[90rem]
     mx-auto
     px-0
-    sm:px-8
+    sm:px-4
+    lg:px-8
   "
 >
   {/* Previous Button */}
@@ -1124,9 +1222,11 @@ export function TestimonialsNew() {
     */}
     <div
       className="
+        hidden
+        min-[800px]:block
         invisible
         w-full
-        md:w-1/2
+        min-[800px]:w-1/2
         px-2
       "
     >
@@ -1142,7 +1242,7 @@ export function TestimonialsNew() {
     <div
       className="
         hidden
-        md:block
+        min-[800px]:block
         absolute
         inset-x-0
         top-6
@@ -1177,7 +1277,7 @@ export function TestimonialsNew() {
             left = "0%";
 
             transform =
-              "translateX(0) translateY(18px) scale(0.86)";
+              "translateX(0) translateY(-50%) scale(0.86)";
 
             opacity = 0.72;
             zIndex = 10;
@@ -1189,7 +1289,7 @@ export function TestimonialsNew() {
             left = "75%";
 
             transform =
-              "translateX(0) translateY(18px) scale(0.86)";
+              "translateX(0) translateY(-50%) scale(0.86)";
 
             opacity = 0.72;
             zIndex = 10;
@@ -1201,7 +1301,7 @@ export function TestimonialsNew() {
             left = "-25%";
 
             transform =
-              "translateX(0) translateY(18px) scale(0.86)";
+              "translateX(0) translateY(-50%) scale(0.86)";
 
             opacity = 0;
             zIndex = 1;
@@ -1212,7 +1312,7 @@ export function TestimonialsNew() {
             left = "100%";
 
             transform =
-              "translateX(0) translateY(18px) scale(0.86)";
+              "translateX(0) translateY(-50%) scale(0.86)";
 
             opacity = 0;
             zIndex = 1;
@@ -1226,7 +1326,7 @@ export function TestimonialsNew() {
               }
               className={`
                 absolute
-                top-0
+                ${position === 0 ? "top-0" : "top-1/2"}
                 px-2
                 transition-all
                 duration-[650ms]
@@ -1244,11 +1344,7 @@ export function TestimonialsNew() {
             >
               <TestimonialCard
                 testimonial={testimonial}
-                position={
-                  position === 0
-                    ? "center"
-                    : "side"
-                }
+                position={position === 0 ? "center" : "side"}
               />
             </div>
           );
@@ -1260,10 +1356,16 @@ export function TestimonialsNew() {
     {/* ───────────────── Mobile Card ───────────────── */}
 
     <div
-      className="
-        md:hidden
+      className={`
+        min-[800px]:hidden
         w-full
-      "
+        overflow-hidden
+        ${slideDirection ? `testimonial-slide-enter-${slideDirection}` : ""}
+      `}
+      key={centerIdx}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      style={{ touchAction: "pan-y" }}
     >
       <TestimonialCard
         testimonial={
