@@ -824,8 +824,9 @@ function NavbarContent() {
 
                   {openMobileMenu === item.label && (
                     <div className="pl-4 pt-3 flex flex-col gap-3">
-                      {item.label === "Our Solutions"
-                        ? item.children.map((child) => (
+                      {item.children.map((child) => {
+                        if (item.label === "Our Solutions") {
+                          return (
                             <Link
                               key={child.data_uniq_id}
                               href={`/solutions-details?id=${child.data_uniq_id}`}
@@ -834,32 +835,37 @@ function NavbarContent() {
                             >
                               {child.title}
                             </Link>
-                          ))
-                        : item.label === "About Us"
-                          ? item.children.map((child) => (
-                              <Link
-                                key={child.href}
-                                href={child.href}
-                                onClick={() => setIsOpen(false)}
-                                className="text-base text-[#293E52]"
-                              >
-                                {child.title}
-                              </Link>
-                            ))
-                          : item.children.map((child) => (
+                          );
+                        }
+
+                        if (item.label === "About Us") {
+                          return (
                             <Link
-                              key={child.data_uniq_id}
-                              href={`/investor-relations?tab=${child.data_uniq_id}`}
+                              key={child.href}
+                              href={child.href}
                               onClick={() => setIsOpen(false)}
-                              className={`text-base font-medium transition-colors ${
-                                isInvestorChildActive(child.data_uniq_id)
-                                  ? "bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent font-bold"
-                                  : "text-[#293E52]"
-                              }`}
+                              className="text-base text-[#293E52]"
                             >
                               {child.title}
                             </Link>
-                          ))}
+                          );
+                        }
+
+                        return (
+                          <Link
+                            key={child.data_uniq_id}
+                            href={`/investor-relations?tab=${child.data_uniq_id}`}
+                            onClick={() => setIsOpen(false)}
+                            className={`text-base font-medium transition-colors ${
+                              isInvestorChildActive(child.data_uniq_id)
+                                ? "bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent font-bold"
+                                : "text-[#293E52]"
+                            }`}
+                          >
+                            {child.title}
+                          </Link>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
