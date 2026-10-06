@@ -322,10 +322,10 @@
 //   )}
 // </div>
 
-            
+
 //           </div>
 
-          
+
 
 //           {/* Bottom Bar */}
 //           <div className="border-t border-gray-700 pt-2 flex flex-col md:flex-row justify-between items-center text-white text-sm lg:ml-2">
@@ -558,7 +558,7 @@ export default function Footer() {
                   solutions.map((solution) => (
                     <li key={solution.data_uniq_id}>
                       <a
-                        href={`/solutions-details?id=${solution.data_uniq_id}`}
+                        href={`/solutions-details/?id=${solution.data_uniq_id}`}
                         className="text-gray-300 hover:text-green-400 transition-colors text-sm"
                       >
                         {solution.title}
@@ -647,18 +647,18 @@ export default function Footer() {
                     />
                   </a> */}
 
-                 <a
-  href="https://wa.me/917094488909"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="transition-colors"
->
-  <img
-    src="/images/whatsapp.svg"
-    alt="WhatsApp"
-    className="w-5 h-5 hover:brightness-125 hover:scale-110 transition-transform duration-200"
-  />
-</a>
+                  <a
+                    href="https://wa.me/917094488909"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-colors"
+                  >
+                    <img
+                      src="/images/whatsapp.svg"
+                      alt="WhatsApp"
+                      className="w-5 h-5 hover:brightness-125 hover:scale-110 transition-transform duration-200"
+                    />
+                  </a>
 
                   <a href="https://www.instagram.com/speedteamgroup" className="transition-colors">
                     <img
@@ -689,14 +689,14 @@ export default function Footer() {
               )}
             </div>
 
-            
+
           </div>
 
-          
+
 
           {/* Bottom Bar */}
           <div className="border-t border-gray-700 pt-2 flex flex-col md:flex-row justify-between items-center text-white text-sm lg:ml-2">
-  <p>© {new Date().getFullYear()} - Renfra Energy India Limited</p>
+            <p>© {new Date().getFullYear()} - Renfra Energy India Limited</p>
             <div className="flex gap-4 mt-4 md:mt-0">
               <a href="/terms&conditions" className="text-white transition-colors">
                 Terms & Conditions

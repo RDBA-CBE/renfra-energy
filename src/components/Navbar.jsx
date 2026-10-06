@@ -183,7 +183,7 @@
 //                         item.children.map((child) => (
 //                           <Link
 //                             key={child.data_uniq_id}
-//                             href={`/solutions-details?id=${child.data_uniq_id}`}
+//                             href={`/solutions-details/?id=${child.data_uniq_id}`}
 //                             className="block px-5 py-3 text-sm text-[#293E52] hover:bg-gray-100 rounded-xl"
 //                           >
 //                             {child.title}
@@ -352,7 +352,7 @@
 //                         ? item.children.map((child) => (
 //                             <Link
 //                               key={child.data_uniq_id}
-//                               href={`/solutions-details?id=${child.data_uniq_id}`}
+//                               href={`/solutions-details/?id=${child.data_uniq_id}`}
 //                               onClick={() => setIsOpen(false)}
 //                               className="text-base text-[#293E52]"
 //                             >
@@ -483,7 +483,7 @@ function NavbarContent() {
     },
     {
       label: "Our Solutions",
-      href: "/solutions",
+      href: "/solutions/",
       children: solutions,
     },
     {
@@ -499,7 +499,7 @@ function NavbarContent() {
   ];
 
   const isActive = (href) => {
-    if (href === "/solutions") {
+    if (href === "/solutions/") {
       return (
         pathname === "/solutions" ||
         pathname === "/solutions-details"
@@ -551,11 +551,10 @@ function NavbarContent() {
                     <div className="flex items-center gap-1 cursor-pointer font-bold text-[#293E52]">
                       <Link
                         href={item.href}
-                        className={`text-sm ${
-                          isActive(item.href)
+                        className={`text-sm ${isActive(item.href)
                             ? "bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent"
                             : "hover:text-teal-600"
-                        }`}
+                          }`}
                       >
                         {item.label}
                       </Link>
@@ -584,7 +583,7 @@ function NavbarContent() {
                         item.children.map((child) => (
                           <Link
                             key={child.data_uniq_id}
-                            href={`/solutions-details?id=${child.data_uniq_id}`}
+                            href={`/solutions-details/?id=${child.data_uniq_id}`}
                             className="block px-5 py-3 text-sm text-[#293E52] hover:bg-gray-100 rounded-xl"
                           >
                             {child.title}
@@ -606,11 +605,10 @@ function NavbarContent() {
                     <div className="flex items-center gap-1 cursor-pointer font-bold text-[#293E52]">
                       <Link
                         href={item.href}
-                        className={`text-sm ${
-                          isAboutActive()
+                        className={`text-sm ${isAboutActive()
                             ? "bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent"
                             : "hover:text-teal-600"
-                        }`}
+                          }`}
                       >
                         {item.label}
                       </Link>
@@ -649,11 +647,10 @@ function NavbarContent() {
                   <div key={item.label} className="relative group">
                     <div className="flex items-center gap-1 cursor-pointer font-bold text-[#293E52]">
                       <span
-                        className={`text-sm ${
-                          isInvestorRelationsActive()
+                        className={`text-sm ${isInvestorRelationsActive()
                             ? "bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent"
                             : "hover:text-teal-600"
-                        }`}
+                          }`}
                       >
                         Investor Relations
                       </span>
@@ -683,11 +680,10 @@ function NavbarContent() {
                           <Link
                             key={child.data_uniq_id}
                             href={`/investor-relations?tab=${child.data_uniq_id}`}
-                            className={`block px-5 py-3 text-sm font-medium transition-colors duration-150 ${
-                              isInvestorChildActive(child.data_uniq_id)
+                            className={`block px-5 py-3 text-sm font-medium transition-colors duration-150 ${isInvestorChildActive(child.data_uniq_id)
                                 ? "bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent font-bold"
                                 : "text-[#293E52] hover:bg-gray-100"
-                            }`}
+                              }`}
                           >
                             {child.title}
                           </Link>
@@ -707,11 +703,10 @@ function NavbarContent() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`text-sm transition-colors font-bold ${
-                    isActive(item.href)
+                  className={`text-sm transition-colors font-bold ${isActive(item.href)
                       ? "bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent"
                       : "text-[#293E52] hover:text-teal-600"
-                  }`}
+                    }`}
                 >
                   {item.label}
                 </Link>
@@ -748,9 +743,8 @@ function NavbarContent() {
 
         {/* Mobile Menu */}
         <div
-          className={`lg:hidden fixed inset-0 bg-white z-50 transition-transform duration-300 overflow-y-auto ${
-            isOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`lg:hidden fixed inset-0 bg-white z-50 transition-transform duration-300 overflow-y-auto ${isOpen ? "translate-x-0" : "translate-x-full"
+            }`}
         >
           <div className="flex justify-between items-center px-6 pt-6">
             <Image
@@ -776,7 +770,7 @@ function NavbarContent() {
                         onClick={() => setIsOpen(false)}
                         className={
                           (item.label === "About Us" && isAboutActive()) ||
-                          (item.label === "Our Solutions" && isActive(item.href))
+                            (item.label === "Our Solutions" && isActive(item.href))
                             ? "bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent"
                             : ""
                         }
@@ -787,11 +781,10 @@ function NavbarContent() {
                       <button
                         type="button"
                         onClick={() => toggleMobileMenu(item.label)}
-                        className={`text-left ${
-                          item.label === "Investor Relations" && isInvestorRelationsActive()
+                        className={`text-left ${item.label === "Investor Relations" && isInvestorRelationsActive()
                             ? "bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent"
                             : ""
-                        }`}
+                          }`}
                       >
                         {item.label}
                       </button>
@@ -805,9 +798,8 @@ function NavbarContent() {
                       className="p-1"
                     >
                       <svg
-                        className={`w-5 h-5 transition-transform duration-300 ${
-                          openMobileMenu === item.label ? "rotate-180" : ""
-                        }`}
+                        className={`w-5 h-5 transition-transform duration-300 ${openMobileMenu === item.label ? "rotate-180" : ""
+                          }`}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -826,36 +818,35 @@ function NavbarContent() {
                     <div className="pl-4 pt-3 flex flex-col gap-3">
                       {item.label === "Our Solutions"
                         ? item.children.map((child) => (
+                          <a
+                            key={child.data_uniq_id}
+                            href={`/solutions-details?id=${child.data_uniq_id}`}
+                            onClick={() => setIsOpen(false)}
+                            className="text-base text-[#293E52]"
+                          >
+                            {child.title}
+                          </Link>
+                        ))
+                        : item.label === "About Us"
+                          ? item.children.map((child) => (
                             <Link
-                              key={child.data_uniq_id}
-                              href={`/solutions-details?id=${child.data_uniq_id}`}
+                              key={child.href}
+                              href={child.href}
                               onClick={() => setIsOpen(false)}
                               className="text-base text-[#293E52]"
                             >
                               {child.title}
                             </Link>
                           ))
-                        : item.label === "About Us"
-                          ? item.children.map((child) => (
-                              <Link
-                                key={child.href}
-                                href={child.href}
-                                onClick={() => setIsOpen(false)}
-                                className="text-base text-[#293E52]"
-                              >
-                                {child.title}
-                              </Link>
-                            ))
                           : item.children.map((child) => (
                             <Link
                               key={child.data_uniq_id}
                               href={`/investor-relations?tab=${child.data_uniq_id}`}
                               onClick={() => setIsOpen(false)}
-                              className={`text-base font-medium transition-colors ${
-                                isInvestorChildActive(child.data_uniq_id)
+                              className={`text-base font-medium transition-colors ${isInvestorChildActive(child.data_uniq_id)
                                   ? "bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent font-bold"
                                   : "text-[#293E52]"
-                              }`}
+                                }`}
                             >
                               {child.title}
                             </Link>
