@@ -26,7 +26,7 @@ export const COMPLETED_PROJECTS = [
 
 export const ONGOING_PROJECTS = [
   // Left side callouts
-  { id: "o-tiruvananamalai", city: "Tiruvananamalai", value: "5 MW", type: "solar", x: 56.3, y: 21.6, side: "left" },
+  { id: "o-tiruvannamalai", city: "Tiruvannamalai", value: "5 MW", type: "solar", x: 56.3, y: 21.6, side: "left" },
   { id: "o-karur", city: "Karur", value: "49.50 MW", type: "wind", x: 37.9, y: 49.9, side: "left" },
 
   // Right side callouts
