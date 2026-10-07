@@ -20,9 +20,10 @@ const POSTS = [
 /* ─────────────────────────────────────────────────────────────────────────
    EmbedCard
    ───────────────────────────────────────────────────────────────────────── */
-function EmbedCard({ embedSrc, postUrl, index }) {
+function EmbedCard({ embedSrc, postUrl, index, onLoad }) {
   const iframeRef = useRef(null);
   const [iframeH, setIframeH] = useState(670);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (iframeRef.current) {
@@ -45,11 +46,27 @@ function EmbedCard({ embedSrc, postUrl, index }) {
     return () => window.removeEventListener("message", onMessage);
   }, []);
 
+  const handleLoad = () => {
+    setIsLoaded(true);
+    onLoad?.();
+  };
+
   return (
     <div
-      className="break-inside-avoid mb-5 rounded-2xl border border-[#e2e8f0] bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
-      style={{ overflow: "hidden", height: iframeH, position: "relative" }}
+      className="relative break-inside-avoid mb-5 overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white shadow-sm transition-shadow duration-200 hover:shadow-md"
+      style={{ height: iframeH }}
     >
+      {!isLoaded && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-100/90 backdrop-blur-[1px]">
+          <div className="flex flex-col items-center gap-2 text-slate-500">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#3AB257] border-t-transparent" />
+            <span className="text-[10px] font-semibold uppercase tracking-[0.2em]">
+              Loading
+            </span>
+          </div>
+        </div>
+      )}
+
       <iframe
         ref={iframeRef}
         src={embedSrc}
@@ -59,9 +76,12 @@ function EmbedCard({ embedSrc, postUrl, index }) {
         frameBorder="0"
         allowFullScreen
         scrolling="no"
-        className="block w-full border-0"
+        className={`block w-full border-0 transition-opacity duration-300 ${
+          isLoaded ? "opacity-100" : "opacity-0"
+        }`}
         loading="lazy"
-        credentialless='true'
+        onLoad={handleLoad}
+        credentialless="true"
       />
 
       {/* LinkedIn wordmark mask */}
@@ -105,6 +125,29 @@ function EmbedCard({ embedSrc, postUrl, index }) {
    Section
    ───────────────────────────────────────────────────────────────────────── */
 function LinkedInPosts() {
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [loadedCards, setLoadedCards] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (loadedCards === 0) {
+        setIsPageLoading(false);
+      }
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, [loadedCards]);
+
+  useEffect(() => {
+    if (loadedCards >= POSTS.length) {
+      setIsPageLoading(false);
+    }
+  }, [loadedCards]);
+
+  const handleCardLoad = () => {
+    setLoadedCards((count) => Math.min(count + 1, POSTS.length));
+  };
+
   return (
     <section aria-labelledby="linkedin-heading">
       {/* Header */}
@@ -121,9 +164,6 @@ function LinkedInPosts() {
             className="text-2xl sm:text-3xl font-bold text-[#293E52] leading-tight"
           >
             Latest News{" "}
-            {/* <span className="bg-gradient-to-r from-[#329ACD] to-[#3AB257] bg-clip-text text-transparent">
-              LinkedIn
-            </span> */}
           </h2>
         </div>
 
@@ -138,17 +178,36 @@ function LinkedInPosts() {
         </a>
       </div>
 
-      {/* 3-col masonry */}
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-5">
-        {POSTS.map((post, i) => (
-          <EmbedCard
-            key={post.embedSrc}
-            embedSrc={post.embedSrc}
-            postUrl={post.postUrl}
-            index={i}
-          />
-        ))}
-      </div>
+      {isPageLoading ? (
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-5" aria-live="polite" aria-busy="true">
+          {Array.from({ length: POSTS.length }).map((_, i) => (
+            <div
+              key={`skeleton-${i}`}
+              className="mb-5 h-[420px] rounded-2xl border border-[#e2e8f0] bg-slate-100 shadow-sm"
+            >
+              <div className="flex h-full animate-pulse flex-col p-4">
+                <div className="mb-4 h-8 w-24 rounded bg-slate-200" />
+                <div className="mb-3 h-4 w-full rounded bg-slate-200" />
+                <div className="mb-3 h-4 w-5/6 rounded bg-slate-200" />
+                <div className="mb-3 h-4 w-4/6 rounded bg-slate-200" />
+                <div className="mt-auto h-52 rounded-xl bg-slate-200" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-5">
+          {POSTS.map((post, i) => (
+            <EmbedCard
+              key={post.embedSrc}
+              embedSrc={post.embedSrc}
+              postUrl={post.postUrl}
+              index={i}
+              onLoad={handleCardLoad}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
