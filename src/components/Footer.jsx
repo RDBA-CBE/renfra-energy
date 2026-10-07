@@ -538,7 +538,7 @@ export default function Footer() {
                   { label: "IMS @ Renfra", href: "/ims@renfra" },
                   { label: "News & Media Page", href: "/news" },
                   { label: "Career", href: "/career" },
-                  { label: "Investor Relations", href: "/investor-relations?tab=drhp" },
+                  { label: "Investor Relations", href: "/investor-relations/?tab=drhp" },
                   { label: "Contact Us", href: "/contact" },
                 ].map((link) => (
                   <li key={link.label}>

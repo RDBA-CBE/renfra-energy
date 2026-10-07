@@ -1885,7 +1885,10 @@ function NewInvestorSectionInner() {
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
-    router.push(`/investor-relations?tab=${tabId}`, { scroll: false });
+    router.push(
+      `/investor-relations/?tab=${encodeURIComponent(tabId)}`,
+      { scroll: false }
+    );
   };
 
   const activeTabData = tabsData.find((tab) => tab.id === activeTab) || tabsData[0] || null;
@@ -2160,4 +2163,3 @@ export default function NewInvestorSection() {
     </Suspense>
   );
 }
-

@@ -679,7 +679,7 @@ function NavbarContent() {
                         item.children.map((child) => (
                           <Link
                             key={child.data_uniq_id}
-                            href={`/investor-relations?tab=${child.data_uniq_id}`}
+                            href={`/investor-relations/?tab=${encodeURIComponent(child.data_uniq_id)}`}
                             className={`block px-5 py-3 text-sm font-medium transition-colors duration-150 ${isInvestorChildActive(child.data_uniq_id)
                                 ? "bg-gradient-to-r from-[#3AB257] to-[#329ACD] bg-clip-text text-transparent font-bold"
                                 : "text-[#293E52] hover:bg-gray-100"
@@ -846,7 +846,7 @@ function NavbarContent() {
                         return (
                           <Link
                             key={child.data_uniq_id}
-                            href={`/investor-relations?tab=${child.data_uniq_id}`}
+                            href={`/investor-relations/?tab=${encodeURIComponent(child.data_uniq_id)}`}
                             onClick={() => setIsOpen(false)}
                             className={`text-base font-medium transition-colors ${
                               isInvestorChildActive(child.data_uniq_id)

@@ -85,7 +85,7 @@ const toggleItem = (label) => {
     <div className="relative w-full h-screen overflow-hidden bg-gray-900">
       {/* Background GIF */}
       <video
-  src="/images/Renfra-Energy-final-web.mp4" // replace with your actual video path
+  src="/images/Renfra-Energy-final-web-compr.mp4" // replace with your actual video path
   autoPlay
   loop
   muted
