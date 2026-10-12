@@ -594,10 +594,10 @@ export default function Footer() {
                   <div>
                     <p className="text-white text-sm font-medium">Call Us</p>
                     <a href="tel:+917094488909" className="text-gray-400 text-sm ">
-                      Service: +91 70944 88909
+                      For Project Enquiries : +91 70944 88909
                     </a>{" "} <br />
                     <a href="tel:+919965515120" className="text-gray-400 text-sm ">
-                      Career: +91 99655 15120
+                      For Career Enquiries : +91 99655 15120
                     </a>{" "}
                   </div>
                 </div>
